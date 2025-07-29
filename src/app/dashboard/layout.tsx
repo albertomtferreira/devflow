@@ -50,16 +50,12 @@ import { signOut } from 'firebase/auth';
 
 const navItems = [
   { href: '/dashboard', icon: LayoutGrid, label: 'Dashboard' },
-  { href: '/dashboard/code-vault', icon: Code, label: 'Code Vault' },
-  { href: '/dashboard/bookmarks', icon: Bookmark, label: 'Bookmarks' },
-  { href: '/dashboard/learning-log', icon: BookOpen, label: 'Learning Log' },
-  { href: '/dashboard/recommendations', icon: Lightbulb, label: 'Recommendations' },
 ];
 
 const mockProjects = [
-    { id: '1', name: 'My Awesome App' },
-    { id: '2', name: 'Data Visualizer' },
-    { id: '3', name: 'Learning Go' },
+  { id: '1', name: 'My Awesome App' },
+  { id: '2', name: 'Data Visualizer' },
+  { id: '3', name: 'Learning Go' },
 ];
 
 
@@ -73,7 +69,7 @@ export default function DashboardLayout({
   const router = useRouter();
 
 
-  if(loading) {
+  if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <p>Loading...</p>
@@ -81,7 +77,7 @@ export default function DashboardLayout({
     )
   }
 
-  if(!user) {
+  if (!user) {
     return null;
   }
 
@@ -94,12 +90,14 @@ export default function DashboardLayout({
     <SidebarProvider>
       <div className="flex min-h-screen bg-muted/40">
         <Sidebar collapsible="icon">
-          <SidebarHeader className="flex items-center justify-between p-2">
-            <Link href="/dashboard" className="flex items-center gap-2">
-              <Code className="h-8 w-8 text-primary" />
-              <span className="text-xl font-bold">DevFlow</span>
-            </Link>
-            <SidebarTrigger />
+          <SidebarHeader>
+            <div className='flex justify-between items-center gap-2 p-2'>
+              <Link href="/dashboard" className="flex items-center gap-2">
+                <Code className="h-8 w-8 text-primary" />
+                <span className="text-xl font-bold">DevFlow</span>
+              </Link>
+              <SidebarTrigger />
+            </div>
           </SidebarHeader>
           <SidebarContent>
             <SidebarMenu>
@@ -107,7 +105,7 @@ export default function DashboardLayout({
                 <SidebarMenuItem key={item.href}>
                   <Link href={item.href} legacyBehavior passHref>
                     <SidebarMenuButton
-                      isActive={pathname.startsWith(item.href)}
+                      isActive={pathname === item.href}
                       tooltip={item.label}
                     >
                       <item.icon />
@@ -127,15 +125,15 @@ export default function DashboardLayout({
               <SidebarMenu>
                 {mockProjects.map((project) => (
                   <SidebarMenuItem key={project.id}>
-                     <Link href={`/dashboard/projects/${project.id}`} legacyBehavior passHref>
-                        <SidebarMenuButton
-                            isActive={pathname === `/dashboard/projects/${project.id}`}
-                            tooltip={project.name}
-                        >
-                            <Folder />
-                            <span>{project.name}</span>
-                        </SidebarMenuButton>
-                     </Link>
+                    <Link href={`/dashboard/projects/${project.id}`} legacyBehavior passHref>
+                      <SidebarMenuButton
+                        isActive={pathname === `/dashboard/projects/${project.id}`}
+                        tooltip={project.name}
+                      >
+                        <Folder />
+                        <span>{project.name}</span>
+                      </SidebarMenuButton>
+                    </Link>
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
@@ -143,10 +141,10 @@ export default function DashboardLayout({
           </SidebarContent>
           <SidebarFooter>
             <SidebarMenu>
-               <SidebarMenuItem>
+              <SidebarMenuItem>
                 <SidebarMenuButton tooltip="Support">
-                    <LifeBuoy />
-                    <span>Support</span>
+                  <LifeBuoy />
+                  <span>Support</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
@@ -181,7 +179,7 @@ export default function DashboardLayout({
 function UserMenu() {
   const { user } = useAuth();
   const router = useRouter();
-  
+
   const handleLogout = async () => {
     await signOut(auth);
     router.push('/sign-in');
