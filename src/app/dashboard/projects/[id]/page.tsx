@@ -26,7 +26,12 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
       <Tabs defaultValue="overview" className="w-full">
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="roadmap">Roadmap & Changelog</TabsTrigger>
+          <TabsTrigger value="roadmap">Roadmap</TabsTrigger>
+          <TabsTrigger value="code-vault">Code Vault</TabsTrigger>
+          <TabsTrigger value="learning-log">Learning Log</TabsTrigger>
+          <TabsTrigger value="bookmarks">Bookmarks</TabsTrigger>
+          <TabsTrigger value="files">Files</TabsTrigger>
+          <TabsTrigger value="versions">Versions</TabsTrigger>
           <TabsTrigger value="github" disabled>GitHub</TabsTrigger>
         </TabsList>
         <TabsContent value="overview" className="mt-4">
@@ -85,10 +90,60 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
         <TabsContent value="roadmap">
             <Card>
                 <CardHeader>
-                    <CardTitle>Roadmap Editor</CardTitle>
+                    <CardTitle>Roadmap</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <p className="text-muted-foreground">A markdown editor would be implemented here to create and track project roadmaps and changelogs.</p>
+                    <p className="text-muted-foreground">A markdown editor or a Kanban board would be implemented here to create and track project roadmaps and changelogs.</p>
+                </CardContent>
+            </Card>
+        </TabsContent>
+         <TabsContent value="code-vault">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Project-Specific Code Vault</CardTitle>
+                </Header>
+                <CardContent>
+                    <p className="text-muted-foreground">Here you could see and manage code snippets that are specifically related to this project.</p>
+                </CardContent>
+            </Card>
+        </TabsContent>
+        <TabsContent value="learning-log">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Project-Specific Learning Log</CardTitle>
+                </Header>
+                <CardContent>
+                    <p className="text-muted-foreground">Log your learnings, challenges, and solutions encountered while working on this project.</p>
+                </CardContent>
+            </Card>
+        </TabsContent>
+        <TabsContent value="bookmarks">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Project Bookmarks</CardTitle>
+                </Header>
+                <CardContent>
+                    <p className="text-muted-foreground">Save and categorize links to documentation, articles, and other resources relevant to this project.</p>
+                </CardContent>
+            </Card>
+        </TabsContent>
+        <TabsContent value="files">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Project Files</CardTitle>
+                </Header>
+                <CardContent>
+                    <p className="text-muted-foreground">A file management system would be here, likely integrated with Firebase Storage, to handle project-related assets.</p>
+                </CardContent>
+            </Card>
+        </TabsContent>
+        <TabsContent value="versions">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Version History</CardTitle>
+                </Header>
+                <CardContent>
+                    <p className="text-muted-foreground">This area would display a log of project versions, deployments, and changelogs, possibly integrated with Git tags or a CI/CD pipeline.</p>
                 </CardContent>
             </Card>
         </TabsContent>

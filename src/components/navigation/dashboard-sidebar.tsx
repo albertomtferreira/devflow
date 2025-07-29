@@ -40,23 +40,24 @@ export function DashboardSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        <div className='flex justify-between items-center gap-2 p-2'>
+        <div className='flex justify-between items-center gap-2 p-2 group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:items-start'>
           <Link href="/dashboard" className="flex items-center gap-2">
-            <Code className="h-8 w-8 text-primary" />
+            <Code className="h-8 w-8 text-primary " />
             <span className="text-xl font-bold group-data-[collapsible=icon]:hidden">DevFlow</span>
           </Link>
           <SidebarTrigger />
         </div>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMenu>
-          <SidebarMenuItem>
+        <SidebarMenu >
+          <SidebarMenuItem >
             <Link href="/dashboard" legacyBehavior passHref>
-              <SidebarMenuButton
+            <SidebarMenuButton
                 isActive={pathname === '/dashboard'}
                 tooltip="Dashboard"
+                
               >
-                <LayoutGrid />
+                <LayoutGrid  />
                 <span>Dashboard</span>
               </SidebarMenuButton>
             </Link>
