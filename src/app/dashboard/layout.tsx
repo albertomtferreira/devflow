@@ -8,14 +8,13 @@ import {
   AvatarImage,
 } from '@/components/ui/avatar';
 import {
-  Bookmark,
-  BookOpen,
   Code,
-  FileCode2,
   LayoutGrid,
-  Lightbulb,
   Settings,
   LogOut,
+  Folder,
+  Plus,
+  LifeBuoy,
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -27,6 +26,9 @@ import {
   SidebarMenuButton,
   SidebarFooter,
   SidebarTrigger,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarGroupAction,
 } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import {
@@ -44,11 +46,14 @@ import { signOut } from 'firebase/auth';
 
 const navItems = [
   { href: '/dashboard', icon: LayoutGrid, label: 'Dashboard' },
-  { href: '/dashboard/code-vault', icon: FileCode2, label: 'Code Vault' },
-  { href: '/dashboard/learning-log', icon: BookOpen, label: 'Learning Log' },
-  { href: '/dashboard/bookmarks', icon: Bookmark, label: 'Bookmarks' },
-  { href: '/dashboard/recommendations', icon: Lightbulb, label: 'Recommendations' },
 ];
+
+const mockProjects = [
+    { id: '1', name: 'My Awesome App' },
+    { id: '2', name: 'Data Visualizer' },
+    { id: '3', name: 'Learning Go' },
+];
+
 
 export default function DashboardLayout({
   children,
@@ -103,13 +108,36 @@ export default function DashboardLayout({
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
+            <SidebarGroup>
+              <SidebarGroupLabel>Projects</SidebarGroupLabel>
+              <SidebarGroupAction asChild>
+                <button>
+                  <Plus />
+                </button>
+              </SidebarGroupAction>
+              <SidebarMenu>
+                {mockProjects.map((project) => (
+                  <SidebarMenuItem key={project.id}>
+                     <Link href={`/dashboard/projects/${project.id}`} legacyBehavior passHref>
+                        <SidebarMenuButton
+                            isActive={pathname === `/dashboard/projects/${project.id}`}
+                            tooltip={project.name}
+                        >
+                            <Folder />
+                            <span>{project.name}</span>
+                        </SidebarMenuButton>
+                     </Link>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroup>
           </SidebarContent>
           <SidebarFooter>
             <SidebarMenu>
                <SidebarMenuItem>
-                <SidebarMenuButton onClick={handleLogout} tooltip="Logout">
-                  <LogOut />
-                  <span>Logout</span>
+                <SidebarMenuButton tooltip="Support">
+                    <LifeBuoy />
+                    <span>Support</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
