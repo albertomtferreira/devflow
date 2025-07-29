@@ -4,11 +4,11 @@ import { Label } from "@/components/ui/label";
 
 export default function SettingsPage() {
   return (
-    <div className="container mx-auto">
+    <div>
        <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
       </div>
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-2xl">
         <Card>
             <CardHeader>
                 <CardTitle>Appearance</CardTitle>
