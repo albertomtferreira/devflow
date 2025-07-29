@@ -15,7 +15,7 @@ export default function ProjectDetailLayout({
     params: { id: string };
   }) {
   return (
-    <div className="p-4 md:p-6">
+    <div>
       <div className="mb-6">
         <h1 className="text-3xl font-bold tracking-tight">{mockProject.title}</h1>
         <p className="text-muted-foreground mt-1">{mockProject.description}</p>

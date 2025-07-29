@@ -51,14 +51,14 @@ export default function DashboardLayout({
       <div className="flex min-h-screen bg-muted/40">
         <DashboardSidebar />
         <div className="flex flex-1 flex-col">
-          <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+          <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background">
             <div className="flex-1">
               {/* Optional: Add breadcrumbs or page title here */}
             </div>
             <ThemeToggle />
             <UserMenu />
           </header>
-          <main className="flex-1">{children}</main>
+          <main className="flex-1 p-4 md:p-6">{children}</main>
         </div>
       </div>
     </SidebarProvider>
