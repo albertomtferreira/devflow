@@ -32,7 +32,7 @@ export default function DashboardLayout({
     <SidebarProvider>
       <div className="flex min-h-screen bg-muted/40">
         <DashboardSidebar />
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col min-w-0">
           <header className="sticky top-0 z-10 flex h-16 items-center justify-end gap-4 border-b bg-background px-6">
             <ThemeToggle />
             <UserNav />
