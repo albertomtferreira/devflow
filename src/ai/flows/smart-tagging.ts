@@ -41,7 +41,7 @@ Code Snippet: {{{codeSnippet}}}
 Tags:`,
 });
 
-const smartTagFlow = ai.defineFlow(
+export const smartTagFlow = ai.defineFlow(
   {
     name: 'smartTagFlow',
     inputSchema: SmartTagInputSchema,

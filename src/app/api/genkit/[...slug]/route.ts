@@ -1,5 +1,3 @@
-'use server';
-
 /**
  * @fileoverview This is the Genkit API route for Next.js.
  *
@@ -8,6 +6,8 @@
  */
 
 import createNextApiHandler from '@genkit-ai/next';
-import '@/ai/flows/smart-tagging.ts';
+import { smartTagFlow } from '@/ai/flows/smart-tagging';
 
-export const {GET, POST} = createNextApiHandler();
+export const {GET, POST} = createNextApiHandler({
+  flows: [smartTagFlow],
+});
