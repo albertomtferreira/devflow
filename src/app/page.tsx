@@ -44,7 +44,7 @@ export default function LandingPage() {
   }
   return (
     <div className="flex min-h-screen flex-col bg-background">
-      <header className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
+      <header className="container flex h-20 items-center justify-between px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2">
           <Code className="h-8 w-8 text-primary" />
           <span className="text-xl font-bold">DevFlow</span>
@@ -59,8 +59,8 @@ export default function LandingPage() {
         </nav>
       </header>
       <main className="flex-1">
-        <section className="container mx-auto px-4 py-20 text-center md:px-6 md:py-32">
-          <div className="mx-auto max-w-3xl">
+        <section className="container px-4 py-20 text-center md:px-6 md:py-32">
+          <div className="max-w-3xl">
             <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
               Streamline Your Development Workflow
             </h1>
@@ -88,12 +88,12 @@ export default function LandingPage() {
         </section>
 
         <section id="features" className="bg-muted/50 py-20 md:py-24">
-          <div className="container mx-auto px-4 md:px-6">
+          <div className="container px-4 md:px-6">
             <div className="text-center">
               <h2 className="font-headline text-3xl font-bold tracking-tight">
                 All Your Development Tools in One Place
               </h2>
-              <p className="mt-4 max-w-2xl mx-auto text-muted-foreground">
+              <p className="mt-4 max-w-2xl text-muted-foreground">
                 DevFlow integrates seamlessly into your routine, helping you
                 stay organized and productive.
               </p>
@@ -134,7 +134,7 @@ export default function LandingPage() {
         </section>
 
         <section className="py-20 md:py-32">
-          <div className="container mx-auto px-4 md:px-6">
+          <div className="container px-4 md:px-6">
             <div className="grid md:grid-cols-2 items-center gap-12">
               <div>
                 <Image
@@ -164,7 +164,7 @@ export default function LandingPage() {
         </section>
       </main>
       <footer className="border-t">
-        <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 py-8 md:flex-row md:px-6">
+        <div className="container flex flex-col items-center justify-between gap-4 px-4 py-8 md:flex-row md:px-6">
           <div className="flex items-center gap-2">
             <Code className="h-6 w-6 text-primary" />
             <span className="font-semibold">DevFlow</span>
@@ -191,7 +191,7 @@ function FeatureCard({
   return (
     <Card className="text-center">
       <CardHeader>
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
           {icon}
         </div>
         <CardTitle className="mt-4">{title}</CardTitle>
