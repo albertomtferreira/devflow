@@ -1,40 +1,11 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from '@/components/ui/avatar';
-import {
-  Code,
-  LayoutGrid,
-  Settings,
-  LogOut,
-  Folder,
-  Plus,
-  LifeBuoy,
-  PanelLeft,
-  Bookmark,
-  BookOpen,
-  Lightbulb,
-} from 'lucide-react';
-import {
-  SidebarProvider,
-  Sidebar,
-  SidebarHeader,
-  SidebarContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarFooter,
-  SidebarTrigger,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarGroupAction,
-} from '@/components/ui/sidebar';
-import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,20 +14,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { SidebarProvider } from '@/components/ui/sidebar';
+import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { useAuth } from '@/hooks/use-auth';
 import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
-
-const navItems = [
-  { href: '/dashboard', icon: LayoutGrid, label: 'Dashboard' },
-];
-
-const mockProjects = [
-  { id: '1', name: 'My Awesome App' },
-  { id: '2', name: 'Data Visualizer' },
-  { id: '3', name: 'Learning Go' },
-];
+import { DashboardSidebar } from '@/components/dashboard-sidebar';
+import Link from 'next/link';
 
 
 export default function DashboardLayout({
@@ -64,7 +29,6 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const pathname = usePathname();
   const { user, loading } = useAuth();
   const router = useRouter();
 
@@ -78,89 +42,14 @@ export default function DashboardLayout({
   }
 
   if (!user) {
-    return null;
-  }
-
-  const handleLogout = async () => {
-    await signOut(auth);
     router.push('/sign-in');
+    return null;
   }
 
   return (
     <SidebarProvider>
       <div className="flex min-h-screen bg-muted/40">
-        <Sidebar collapsible="icon">
-          <SidebarHeader>
-            <div className='flex justify-between items-center gap-2 p-2'>
-              <Link href="/dashboard" className="flex items-center gap-2">
-                <Code className="h-8 w-8 text-primary" />
-                <span className="text-xl font-bold">DevFlow</span>
-              </Link>
-              <SidebarTrigger />
-            </div>
-          </SidebarHeader>
-          <SidebarContent>
-            <SidebarMenu>
-              {navItems.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <Link href={item.href} legacyBehavior passHref>
-                    <SidebarMenuButton
-                      isActive={pathname === item.href}
-                      tooltip={item.label}
-                    >
-                      <item.icon />
-                      <span>{item.label}</span>
-                    </SidebarMenuButton>
-                  </Link>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-            <SidebarGroup>
-              <SidebarGroupLabel>Projects</SidebarGroupLabel>
-              <SidebarGroupAction asChild>
-                <button>
-                  <Plus />
-                </button>
-              </SidebarGroupAction>
-              <SidebarMenu>
-                {mockProjects.map((project) => (
-                  <SidebarMenuItem key={project.id}>
-                    <Link href={`/dashboard/projects/${project.id}`} legacyBehavior passHref>
-                      <SidebarMenuButton
-                        isActive={pathname === `/dashboard/projects/${project.id}`}
-                        tooltip={project.name}
-                      >
-                        <Folder />
-                        <span>{project.name}</span>
-                      </SidebarMenuButton>
-                    </Link>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroup>
-          </SidebarContent>
-          <SidebarFooter>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Support">
-                  <LifeBuoy />
-                  <span>Support</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <Link href="/dashboard/settings" legacyBehavior passHref>
-                  <SidebarMenuButton
-                    isActive={pathname === '/dashboard/settings'}
-                    tooltip="Settings"
-                  >
-                    <Settings />
-                    <span>Settings</span>
-                  </SidebarMenuButton>
-                </Link>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarFooter>
-        </Sidebar>
+        <DashboardSidebar />
         <div className="flex flex-1 flex-col">
           <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
             <div className="flex-1">
