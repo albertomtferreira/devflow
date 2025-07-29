@@ -1,3 +1,166 @@
-export default function Home() {
-  return <></>;
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Code,
+  FileCode2,
+  Bookmark,
+  BookOpen,
+  LayoutGrid,
+  Lightbulb,
+  Github,
+} from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+
+export default function LandingPage() {
+  return (
+    <div className="flex min-h-screen flex-col bg-background">
+      <header className="container mx-auto flex h-20 items-center justify-between px-4 md:px-6">
+        <Link href="/" className="flex items-center gap-2">
+          <Code className="h-8 w-8 text-primary" />
+          <span className="text-xl font-bold">DevFlow</span>
+        </Link>
+        <nav className="flex items-center gap-4">
+          <Button variant="ghost" asChild>
+            <Link href="#features">Features</Link>
+          </Button>
+          <Button asChild>
+            <Link href="/dashboard">Get Started</Link>
+          </Button>
+        </nav>
+      </header>
+      <main className="flex-1">
+        <section className="container mx-auto px-4 py-20 text-center md:px-6 md:py-32">
+          <div className="mx-auto max-w-3xl">
+            <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+              Streamline Your Development Workflow
+            </h1>
+            <p className="mt-6 text-lg text-muted-foreground">
+              DevFlow is your all-in-one toolkit to organize projects, manage
+              code snippets, track learning, and bookmark resources. Focus on
+              what matters: building great software.
+            </p>
+            <div className="mt-8 flex justify-center gap-4">
+              <Button size="lg" asChild>
+                <Link href="/dashboard">Launch App</Link>
+              </Button>
+              <Button size="lg" variant="outline" asChild>
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+                  <Github className="mr-2" />
+                  View on GitHub
+                </a>
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        <section id="features" className="bg-muted/50 py-20 md:py-24">
+          <div className="container mx-auto px-4 md:px-6">
+            <div className="text-center">
+              <h2 className="font-headline text-3xl font-bold tracking-tight">
+                All Your Development Tools in One Place
+              </h2>
+              <p className="mt-4 max-w-2xl mx-auto text-muted-foreground">
+                DevFlow integrates seamlessly into your routine, helping you stay organized and productive.
+              </p>
+            </div>
+            <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+              <FeatureCard
+                icon={<LayoutGrid className="h-8 w-8" />}
+                title="Project Dashboard"
+                description="Visualize and manage all your projects from a centralized, intuitive dashboard."
+              />
+              <FeatureCard
+                icon={<FileCode2 className="h-8 w-8" />}
+                title="Code Vault"
+                description="Store, tag, and quickly retrieve code snippets. With AI-powered smart tagging."
+              />
+              <FeatureCard
+                icon={<BookOpen className="h-8 w-8" />}
+                title="Learning Logger"
+                description="Document your developer journey, log key insights, and save useful AI prompts."
+              />
+              <FeatureCard
+                icon={<Bookmark className="h-8 w-8" />}
+                title="Bookmark Manager"
+                description="Curate and categorize valuable development resources, articles, and tutorials."
+              />
+              <FeatureCard
+                icon={<Lightbulb className="h-8 w-8" />}
+                title="Recommendation Engine"
+                description="Get personalized project recommendations based on your skills and interests."
+              />
+               <FeatureCard
+                icon={<Github className="h-8 w-8" />}
+                title="GitHub Integration"
+                description="Track progress, issues, and pull requests by connecting your GitHub repositories."
+              />
+            </div>
+          </div>
+        </section>
+
+        <section className="py-20 md:py-32">
+            <div className="container mx-auto px-4 md:px-6">
+                <div className="grid md:grid-cols-2 items-center gap-12">
+                    <div>
+                         <Image
+                            src="https://placehold.co/600x400.png"
+                            width={600}
+                            height={400}
+                            alt="DevFlow Dashboard"
+                            className="rounded-lg shadow-xl"
+                            data-ai-hint="dashboard application"
+                        />
+                    </div>
+                    <div>
+                        <h2 className="font-headline text-3xl font-bold tracking-tight">A Clean, Distraction-Free Workspace</h2>
+                        <p className="mt-4 text-lg text-muted-foreground">
+                            Our minimalist, grid-based layout is designed to help you focus. Customize the theme to create a development environment that's uniquely yours.
+                        </p>
+                         <Button size="lg" className="mt-6" asChild>
+                            <Link href="/dashboard">Explore the Dashboard</Link>
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+      </main>
+      <footer className="border-t">
+        <div className="container mx-auto flex flex-col items-center justify-between gap-4 px-4 py-8 md:flex-row md:px-6">
+          <div className="flex items-center gap-2">
+            <Code className="h-6 w-6 text-primary" />
+            <span className="font-semibold">DevFlow</span>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            © {new Date().getFullYear()} DevFlow. Built for developers, by developers.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+function FeatureCard({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) {
+  return (
+    <Card className="text-center">
+      <CardHeader>
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+          {icon}
+        </div>
+        <CardTitle className="mt-4">{title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <p className="text-muted-foreground">{description}</p>
+      </CardContent>
+    </Card>
+  );
 }
