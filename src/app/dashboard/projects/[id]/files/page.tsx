@@ -1,14 +1,33 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function FilesPage() {
+  const isEmpty = true;
+
   return (
     <Card>
       <CardHeader>
-          <CardTitle>Project Files</CardTitle>
+        <CardTitle>Files & Assets</CardTitle>
+        <CardDescription>
+          Manage project-related files like screenshots, diagrams, and other assets.
+        </CardDescription>
       </CardHeader>
       <CardContent>
-          <p className="text-muted-foreground">A file management system would be here, likely integrated with Firebase Storage, to handle project-related assets.</p>
+        {isEmpty ? (
+          <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[400px]">
+            <div className="flex flex-col items-center gap-2 text-center">
+              <p className="text-muted-foreground">
+                No files have been uploaded for this project yet.
+              </p>
+              <Button>Upload File</Button>
+            </div>
+          </div>
+        ) : (
+          <div>
+            {/* This is where the list of files would be rendered */}
+          </div>
+        )}
       </CardContent>
     </Card>
-  )
+  );
 }
