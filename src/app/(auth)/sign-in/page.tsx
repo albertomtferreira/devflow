@@ -111,6 +111,14 @@ export default function SignInPage() {
 
   const handleEmailSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (password.length < 8) {
+      toast({
+        variant: 'destructive',
+        title: 'Password is too weak.',
+        description: 'Your password must be at least 8 characters long.',
+      });
+      return;
+    }
     setLoading('signup');
     try {
       await createUserWithEmailAndPassword(auth, email, password);
@@ -232,6 +240,7 @@ export default function SignInPage() {
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      minLength={8}
                     />
                   </div>
                 </CardContent>
