@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export function BookmarksTab() {
+export default function BookmarksPage() {
   return (
     <Card>
       <CardHeader>

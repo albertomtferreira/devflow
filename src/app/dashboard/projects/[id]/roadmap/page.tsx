@@ -20,7 +20,7 @@ const initialRoadmap = `# v1.0.0 (Current)
 - Firestore integration
 `;
 
-export function RoadmapTab() {
+export default function RoadmapPage() {
     const [roadmap, setRoadmap] = useState(initialRoadmap);
     const { toast } = useToast();
 

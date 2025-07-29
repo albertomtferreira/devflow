@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export function CodeVaultTab() {
+export default function CodeVaultPage() {
   return (
     <Card>
       <CardHeader>

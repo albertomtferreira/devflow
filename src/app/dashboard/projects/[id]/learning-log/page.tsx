@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export function LearningLogTab() {
+export default function LearningLogPage() {
   return (
     <Card>
       <CardHeader>

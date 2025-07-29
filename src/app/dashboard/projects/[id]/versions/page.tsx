@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export function VersionsTab() {
+export default function VersionsPage() {
   return (
     <Card>
       <CardHeader>

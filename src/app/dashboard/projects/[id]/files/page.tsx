@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export function FilesTab() {
+export default function FilesPage() {
   return (
     <Card>
       <CardHeader>
