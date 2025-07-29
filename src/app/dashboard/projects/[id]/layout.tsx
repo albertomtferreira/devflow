@@ -7,13 +7,15 @@ const mockProject = {
   description: 'A personal portfolio to showcase my skills and projects. Built with Next.js and Tailwind CSS.',
 };
 
-export default function ProjectDetailLayout({
+export default async function ProjectDetailLayout({
     children,
     params,
   }: {
     children: React.ReactNode;
     params: { id: string };
   }) {
+    const { id } = await params;
+
   return (
     <div>
       <div className="mb-6">
@@ -21,7 +23,7 @@ export default function ProjectDetailLayout({
         <p className="text-muted-foreground mt-1">{mockProject.description}</p>
       </div>
 
-      <ProjectNav projectId={params.id} />
+      <ProjectNav projectId={id} />
       
       <main className="mt-6">
         {children}

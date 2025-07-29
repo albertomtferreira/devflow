@@ -1,48 +1,71 @@
 "use client"
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ProjectCard } from '@/components/features/dashboard/project-card';
-import { PlusCircle } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 import { useAuth } from '@/hooks/use-auth';
+import { cn } from '@/lib/utils';
+import { PlusCircle, ArrowUpRight } from 'lucide-react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+
+type ProjectStatus = 'online' | 'offline' | 'in-progress';
 
 const mockProjects = [
   {
     id: '1',
     title: 'Portfolio Website',
-    description: 'A personal portfolio to showcase my skills and projects. Built with Next.js and Tailwind CSS.',
-    tags: ['Next.js', 'React', 'Tailwind CSS', 'TypeScript'],
-    liveUrl: '#',
-    repoUrl: '#',
-    status: 'online',
+    description: 'A personal portfolio to showcase my skills and projects.',
+    status: 'online' as ProjectStatus,
+    role: 'Owner',
   },
   {
     id: '2',
     title: 'Task Management App',
-    description: 'A full-stack task manager with user authentication and real-time updates using Firebase.',
-    tags: ['React', 'Firebase', 'Node.js', 'Express'],
-    liveUrl: '#',
-    repoUrl: '#',
-    status: 'in-progress',
+    description: 'A full-stack task manager with user authentication.',
+    status: 'in-progress' as ProjectStatus,
+    role: 'Contributor',
   },
   {
     id: '3',
     title: 'E-commerce Store API',
-    description: 'A RESTful API for an online store, featuring product management, orders, and payments.',
-    tags: ['Node.js', 'Express', 'MongoDB', 'API'],
-    liveUrl: null,
-    repoUrl: '#',
-    status: 'offline',
+    description: 'A RESTful API for an online store, built with Node.js.',
+    status: 'offline' as ProjectStatus,
+    role: 'Owner',
   },
   {
     id: '4',
     title: 'Markdown Blog',
-    description: 'A simple, static-generated blog created with Astro and Markdown files.',
-    tags: ['Astro', 'Markdown', 'Static Site'],
-    liveUrl: '#',
-    repoUrl: '#',
-    status: 'online',
+    description: 'A static-generated blog created with Astro.',
+    status: 'online' as ProjectStatus,
+    role: 'Owner',
   },
 ];
+
+const statusClasses: Record<ProjectStatus, string> = {
+    online: 'bg-green-500',
+    offline: 'bg-gray-500',
+    'in-progress': 'bg-yellow-500',
+};
+
+const statusText: Record<ProjectStatus, string> = {
+    online: 'Online',
+    offline: 'Offline',
+    'in-progress': 'In Progress',
+};
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
@@ -51,7 +74,7 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex items-center justify-center">
         <p>Loading...</p>
       </div>
     )
@@ -62,19 +85,63 @@ export default function DashboardPage() {
     return null;
   }
   return (
-    <div className="p-4 md:p-6">
+    <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold tracking-tight">Project Dashboard</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
         <Button>
           <PlusCircle className="mr-2 h-4 w-4" />
           New Project
         </Button>
       </div>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {mockProjects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
-      </div>
+       <Card>
+        <CardHeader>
+          <CardTitle>Your Projects</CardTitle>
+          <CardDescription>
+            A list of all the projects you are working on.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Project</TableHead>
+                <TableHead className="w-[150px]">Status</TableHead>
+                <TableHead className="w-[150px]">Role</TableHead>
+                <TableHead className="w-[100px] text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {mockProjects.map((project) => (
+                <TableRow key={project.id}>
+                  <TableCell>
+                    <div className="font-medium">{project.title}</div>
+                    <div className="text-sm text-muted-foreground line-clamp-1">
+                      {project.description}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                         <span className={cn("h-2 w-2 rounded-full", statusClasses[project.status])} />
+                         <span>{statusText[project.status]}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline">{project.role}</Badge>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Button variant="ghost" size="icon" asChild>
+                        <Link href={`/dashboard/projects/${project.id}`}>
+                            <ArrowUpRight className="h-4 w-4" />
+                            <span className="sr-only">View Project</span>
+                        </Link>
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
     </div>
   );
 }
