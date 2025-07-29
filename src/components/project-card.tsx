@@ -9,6 +9,9 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
+
+type ProjectStatus = 'online' | 'offline' | 'in-progress';
 
 type Project = {
   id: string;
@@ -17,14 +20,33 @@ type Project = {
   tags: string[];
   liveUrl?: string | null;
   repoUrl?: string | null;
+  status?: ProjectStatus;
+};
+
+const statusClasses: Record<ProjectStatus, string> = {
+  online: 'bg-green-500',
+  offline: 'bg-red-500',
+  'in-progress': 'bg-yellow-500',
 };
 
 export function ProjectCard({ project }: { project: Project }) {
   return (
     <Card className="flex flex-col">
       <CardHeader>
-        <CardTitle>{project.title}</CardTitle>
-        <CardDescription className="line-clamp-2">{project.description}</CardDescription>
+        <div className="flex items-center justify-between">
+          <CardTitle>{project.title}</CardTitle>
+          {project.status && (
+            <div className="flex items-center gap-2">
+              <span
+                className={cn(
+                  'h-3 w-3 rounded-full',
+                  statusClasses[project.status] ?? 'bg-gray-400'
+                )}
+              />
+            </div>
+          )}
+        </div>
+        <CardDescription className="line-clamp-2 pt-1">{project.description}</CardDescription>
       </CardHeader>
       <CardContent className="flex-grow">
         <div className="flex flex-wrap gap-2">

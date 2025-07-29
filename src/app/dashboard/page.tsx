@@ -10,6 +10,7 @@ const mockProjects = [
     tags: ['Next.js', 'React', 'Tailwind CSS', 'TypeScript'],
     liveUrl: '#',
     repoUrl: '#',
+    status: 'online',
   },
   {
     id: '2',
@@ -18,6 +19,7 @@ const mockProjects = [
     tags: ['React', 'Firebase', 'Node.js', 'Express'],
     liveUrl: '#',
     repoUrl: '#',
+    status: 'in-progress',
   },
   {
     id: '3',
@@ -26,6 +28,7 @@ const mockProjects = [
     tags: ['Node.js', 'Express', 'MongoDB', 'API'],
     liveUrl: null,
     repoUrl: '#',
+    status: 'offline',
   },
   {
     id: '4',
@@ -34,6 +37,7 @@ const mockProjects = [
     tags: ['Astro', 'Markdown', 'Static Site'],
     liveUrl: '#',
     repoUrl: '#',
+    status: 'online',
   },
 ];
 
