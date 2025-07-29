@@ -10,6 +10,11 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 type ProjectStatus = 'online' | 'offline' | 'in-progress';
 
@@ -36,14 +41,21 @@ export function ProjectCard({ project }: { project: Project }) {
         <div className="flex items-center justify-between">
           <CardTitle>{project.title}</CardTitle>
           {project.status && (
-            <div className="flex items-center gap-2">
-              <span
-                className={cn(
-                  'h-3 w-3 rounded-full',
-                  statusClasses[project.status] ?? 'bg-gray-400'
-                )}
-              />
-            </div>
+            <Tooltip>
+              <TooltipTrigger>
+                <div className="flex items-center gap-2">
+                  <span
+                    className={cn(
+                      'h-3 w-3 rounded-full',
+                      statusClasses[project.status] ?? 'bg-gray-400'
+                    )}
+                  />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p className="capitalize">{project.status.replace('-', ' ')}</p>
+              </TooltipContent>
+            </Tooltip>
           )}
         </div>
         <CardDescription className="line-clamp-2 pt-1">{project.description}</CardDescription>
