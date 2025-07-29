@@ -43,7 +43,7 @@ export function DashboardSidebar() {
         <div className='flex justify-between items-center gap-2 p-2'>
           <Link href="/dashboard" className="flex items-center gap-2">
             <Code className="h-8 w-8 text-primary" />
-            <span className="text-xl font-bold">DevFlow</span>
+            <span className="text-xl font-bold group-data-[collapsible=icon]:hidden">DevFlow</span>
           </Link>
           <SidebarTrigger />
         </div>
