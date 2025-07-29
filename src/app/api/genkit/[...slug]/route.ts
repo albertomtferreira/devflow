@@ -10,5 +10,4 @@
 import {createNextApiHandler} from '@genkit-ai/next';
 import '@/ai/flows/smart-tagging.ts';
 
-const {GET, POST} = createNextApiHandler();
-export {GET, POST};
+export const {GET, POST} = createNextApiHandler();
