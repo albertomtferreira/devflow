@@ -101,7 +101,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
             <Card>
                 <CardHeader>
                     <CardTitle>Project-Specific Code Vault</CardTitle>
-                </Header>
+                </CardHeader>
                 <CardContent>
                     <p className="text-muted-foreground">Here you could see and manage code snippets that are specifically related to this project.</p>
                 </CardContent>
@@ -111,7 +111,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
             <Card>
                 <CardHeader>
                     <CardTitle>Project-Specific Learning Log</CardTitle>
-                </Header>
+                </CardHeader>
                 <CardContent>
                     <p className="text-muted-foreground">Log your learnings, challenges, and solutions encountered while working on this project.</p>
                 </CardContent>
@@ -121,7 +121,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
             <Card>
                 <CardHeader>
                     <CardTitle>Project Bookmarks</CardTitle>
-                </Header>
+                </CardHeader>
                 <CardContent>
                     <p className="text-muted-foreground">Save and categorize links to documentation, articles, and other resources relevant to this project.</p>
                 </CardContent>
@@ -131,7 +131,7 @@ export default function ProjectDetailPage({ params }: { params: { id: string } }
             <Card>
                 <CardHeader>
                     <CardTitle>Project Files</CardTitle>
-                </Header>
+                </CardHeader>
                 <CardContent>
                     <p className="text-muted-foreground">A file management system would be here, likely integrated with Firebase Storage, to handle project-related assets.</p>
                 </CardContent>
