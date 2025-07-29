@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
 import { UserNav } from '@/components/features/dashboard/user-nav';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { DashboardSidebar } from '@/components/navigation/dashboard-sidebar';
 
 export default function DashboardLayout({
   children,
@@ -26,19 +27,15 @@ export default function DashboardLayout({
     return null;
   }
 
-  // Simplified layout for debugging, with top navbar re-introduced
   return (
     <div className="flex min-h-screen bg-muted/40">
-      {/* Placeholder for sidebar */}
-      <div className="w-64 bg-background border-r">
-        <div className="p-4 font-bold">Sidebar Area</div>
-      </div>
+      <DashboardSidebar />
       <div className="flex-1 flex flex-col">
         <header className="sticky top-0 z-10 flex h-16 items-center justify-end gap-4 border-b bg-background px-6">
           <ThemeToggle />
           <UserNav />
         </header>
-        <main className="flex-1 p-6">
+        <main className="p-6">
             {children}
         </main>
       </div>
