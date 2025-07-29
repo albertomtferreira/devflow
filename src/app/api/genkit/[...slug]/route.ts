@@ -7,7 +7,7 @@
  * It is not intended to be edited by hand.
  */
 
-import {createNextApiHandler} from '@genkit-ai/next/server';
+import {createNextApiHandler} from '@genkit-ai/next';
 import '@/ai/flows/smart-tagging.ts';
 
 const {GET, POST} = createNextApiHandler();
