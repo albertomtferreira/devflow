@@ -94,11 +94,12 @@ export default function DashboardLayout({
     <SidebarProvider>
       <div className="flex min-h-screen bg-muted/40">
         <Sidebar collapsible="icon">
-          <SidebarHeader>
+          <SidebarHeader className="flex items-center justify-between p-2">
             <Link href="/dashboard" className="flex items-center gap-2">
               <Code className="h-8 w-8 text-primary" />
               <span className="text-xl font-bold">DevFlow</span>
             </Link>
+            <SidebarTrigger />
           </SidebarHeader>
           <SidebarContent>
             <SidebarMenu>
@@ -158,12 +159,6 @@ export default function DashboardLayout({
                     <span>Settings</span>
                   </SidebarMenuButton>
                 </Link>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                 <SidebarTrigger className='w-full justify-start'>
-                    <PanelLeft />
-                    <span>Collapse</span>
-                  </SidebarTrigger>
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarFooter>
