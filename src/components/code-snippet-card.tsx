@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Card,
   CardContent,
@@ -9,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from './ui/button';
 import { Copy } from 'lucide-react';
 import { ScrollArea } from './ui/scroll-area';
+import { useToast } from '@/hooks/use-toast';
 
 type Snippet = {
   id: string;
@@ -20,9 +23,14 @@ type Snippet = {
 };
 
 export function CodeSnippetCard({ snippet }: { snippet: Snippet }) {
+  const { toast } = useToast();
   // A simple copy-to-clipboard function. In a real app, you'd add user feedback.
   const handleCopy = () => {
     navigator.clipboard.writeText(snippet.code);
+    toast({
+      title: 'Copied!',
+      description: 'The code snippet has been copied to your clipboard.',
+    });
   };
 
   return (
