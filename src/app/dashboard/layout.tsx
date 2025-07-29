@@ -20,7 +20,7 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import { useAuth } from '@/hooks/use-auth';
 import { auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
-import { DashboardSidebar } from '@/components/dashboard-sidebar';
+import { DashboardSidebar } from '@/components/navigation/dashboard-sidebar';
 import Link from 'next/link';
 
 

@@ -50,19 +50,17 @@ export function DashboardSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
-          {navItems.map((item) => (
-            <SidebarMenuItem key={item.href}>
-              <Link href={item.href} legacyBehavior passHref>
-                <SidebarMenuButton
-                  isActive={pathname === item.href}
-                  tooltip={item.label}
-                >
-                  <item.icon />
-                  <span>{item.label}</span>
-                </SidebarMenuButton>
-              </Link>
-            </SidebarMenuItem>
-          ))}
+          <SidebarMenuItem>
+            <Link href="/dashboard" legacyBehavior passHref>
+              <SidebarMenuButton
+                isActive={pathname === '/dashboard'}
+                tooltip="Dashboard"
+              >
+                <LayoutGrid />
+                <span>Dashboard</span>
+              </SidebarMenuButton>
+            </Link>
+          </SidebarMenuItem>
         </SidebarMenu>
         <SidebarGroup>
           <SidebarGroupLabel>Projects</SidebarGroupLabel>

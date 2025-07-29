@@ -1,5 +1,5 @@
-import { CodeSnippetCard } from '@/components/code-snippet-card';
-import { AddSnippetDialog } from '@/components/add-snippet-dialog';
+import { CodeSnippetCard } from '@/components/features/code-vault/code-snippet-card';
+import { AddSnippetDialog } from '@/components/features/code-vault/add-snippet-dialog';
 
 const mockSnippets = [
   {

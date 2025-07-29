@@ -14,6 +14,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
+  TooltipProvider,
 } from '@/components/ui/tooltip';
 
 type ProjectStatus = 'online' | 'offline' | 'in-progress';
@@ -41,21 +42,23 @@ export function ProjectCard({ project }: { project: Project }) {
         <div className="flex items-center justify-between">
           <CardTitle>{project.title}</CardTitle>
           {project.status && (
-            <Tooltip>
-              <TooltipTrigger>
-                <div className="flex items-center gap-2">
-                  <span
-                    className={cn(
-                      'h-3 w-3 rounded-full',
-                      statusClasses[project.status] ?? 'bg-gray-400'
-                    )}
-                  />
-                </div>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p className="capitalize">{project.status.replace('-', ' ')}</p>
-              </TooltipContent>
-            </Tooltip>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={cn(
+                        'h-3 w-3 rounded-full',
+                        statusClasses[project.status] ?? 'bg-gray-400'
+                      )}
+                    />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p className="capitalize">{project.status.replace('-', ' ')}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           )}
         </div>
         <CardDescription className="line-clamp-2 pt-1">{project.description}</CardDescription>

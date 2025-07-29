@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { ProjectCard } from '@/components/project-card';
+import { ProjectCard } from '@/components/features/dashboard/project-card';
 import { PlusCircle } from 'lucide-react';
 
 const mockProjects = [
