@@ -15,6 +15,10 @@ import {
   Folder,
   Plus,
   LifeBuoy,
+  PanelLeft,
+  Bookmark,
+  BookOpen,
+  Lightbulb,
 } from 'lucide-react';
 import {
   SidebarProvider,
@@ -46,6 +50,10 @@ import { signOut } from 'firebase/auth';
 
 const navItems = [
   { href: '/dashboard', icon: LayoutGrid, label: 'Dashboard' },
+  { href: '/dashboard/code-vault', icon: Code, label: 'Code Vault' },
+  { href: '/dashboard/bookmarks', icon: Bookmark, label: 'Bookmarks' },
+  { href: '/dashboard/learning-log', icon: BookOpen, label: 'Learning Log' },
+  { href: '/dashboard/recommendations', icon: Lightbulb, label: 'Recommendations' },
 ];
 
 const mockProjects = [
@@ -85,7 +93,7 @@ export default function DashboardLayout({
   return (
     <SidebarProvider>
       <div className="flex min-h-screen bg-muted/40">
-        <Sidebar>
+        <Sidebar collapsible="icon">
           <SidebarHeader>
             <Link href="/dashboard" className="flex items-center gap-2">
               <Code className="h-8 w-8 text-primary" />
@@ -98,7 +106,7 @@ export default function DashboardLayout({
                 <SidebarMenuItem key={item.href}>
                   <Link href={item.href} legacyBehavior passHref>
                     <SidebarMenuButton
-                      isActive={pathname === item.href}
+                      isActive={pathname.startsWith(item.href)}
                       tooltip={item.label}
                     >
                       <item.icon />
@@ -151,12 +159,17 @@ export default function DashboardLayout({
                   </SidebarMenuButton>
                 </Link>
               </SidebarMenuItem>
+              <SidebarMenuItem>
+                 <SidebarTrigger className='w-full justify-start'>
+                    <PanelLeft />
+                    <span>Collapse</span>
+                  </SidebarTrigger>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarFooter>
         </Sidebar>
         <div className="flex flex-1 flex-col">
           <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
-            <SidebarTrigger />
             <div className="flex-1">
               {/* Optional: Add breadcrumbs or page title here */}
             </div>
