@@ -1,6 +1,9 @@
+"use client"
 import { Button } from '@/components/ui/button';
 import { ProjectCard } from '@/components/features/dashboard/project-card';
 import { PlusCircle } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/hooks/use-auth';
 
 const mockProjects = [
   {
@@ -42,8 +45,24 @@ const mockProjects = [
 ];
 
 export default function DashboardPage() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <p>Loading...</p>
+      </div>
+    )
+  }
+
+  if (!user) {
+    router.push('/sign-in');
+    return null;
+  }
   return (
-    <>
+    <div className="p-4 md:p-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold tracking-tight">Project Dashboard</h1>
         <Button>
@@ -56,6 +75,6 @@ export default function DashboardPage() {
           <ProjectCard key={project.id} project={project} />
         ))}
       </div>
-    </>
+    </div>
   );
 }

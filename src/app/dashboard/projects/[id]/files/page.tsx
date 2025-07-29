@@ -1,13 +1,19 @@
+import FeaturesHeader from "@/components/features/dashboard/features-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function FilesPage() {
+export default async function FilesPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   const isEmpty = true;
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Files & Assets</CardTitle>
+        <FeaturesHeader title={"Files and Assets"} buttonText={"Upload File"} />
         <CardDescription>
           Manage project-related files like screenshots, diagrams, and other assets.
         </CardDescription>
@@ -19,7 +25,6 @@ export default function FilesPage() {
               <p className="text-muted-foreground">
                 No files have been uploaded for this project yet.
               </p>
-              <Button>Upload File</Button>
             </div>
           </div>
         ) : (

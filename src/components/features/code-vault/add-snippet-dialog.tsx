@@ -8,19 +8,22 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, PlusCircle, Sparkles, X } from 'lucide-react';
+import { Loader2, Sparkles, X } from 'lucide-react';
 import { suggestTagsForCode } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 
-export function AddSnippetDialog() {
-  const [isOpen, setIsOpen] = useState(false);
+interface AddSnippetDialogProps {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+}
+
+export function AddSnippetDialog({ isOpen, onOpenChange }: AddSnippetDialogProps) {
   const [code, setCode] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -40,7 +43,6 @@ export function AddSnippetDialog() {
     setIsSuggesting(true);
     try {
       const suggestedTags = await suggestTagsForCode(code);
-      // Avoid duplicates and merge with existing tags
       setTags(Array.from(new Set([...tags, ...suggestedTags])));
     } catch (error) {
       toast({
@@ -59,7 +61,6 @@ export function AddSnippetDialog() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, you would save the snippet to your database here.
     console.log({ title, description, code, tags });
     toast({
         title: "Snippet Added!",
@@ -70,17 +71,11 @@ export function AddSnippetDialog() {
     setTitle('');
     setDescription('');
     setTags([]);
-    setIsOpen(false);
+    onOpenChange(false);
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <PlusCircle className="mr-2 h-4 w-4" />
-          Add Snippet
-        </Button>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>Add New Code Snippet</DialogTitle>

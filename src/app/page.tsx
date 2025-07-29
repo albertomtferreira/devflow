@@ -59,35 +59,37 @@ export default function LandingPage() {
         </nav>
       </header>
       <main className="flex-1">
-        <section className="px-4 py-20 text-center md:px-6 md:py-32">
-          <div className="max-w-3xl mx-auto">
-            <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-              Streamline Your Development Workflow
-            </h1>
-            <p className="mt-6 text-lg text-muted-foreground">
-              DevFlow is your all-in-one toolkit to organize projects, manage
-              code snippets, track learning, and bookmark resources. Focus on
-              what matters: building great software.
-            </p>
-            <div className="mt-8 flex justify-center gap-4">
-              <Button size="lg" asChild>
-                <Link href="/sign-in">Launch App</Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <a
-                  href="https://github.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Github className="mr-2" />
-                  View on GitHub
-                </a>
-              </Button>
+        <section className="w-full py-20 md:py-32">
+          <div className="px-4 md:px-6">
+            <div className="max-w-3xl mx-auto text-center">
+                <h1 className="font-headline text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+                    Streamline Your Development Workflow
+                </h1>
+                <p className="mt-6 text-lg text-muted-foreground">
+                    DevFlow is your all-in-one toolkit to organize projects, manage
+                    code snippets, track learning, and bookmark resources. Focus on
+                    what matters: building great software.
+                </p>
+                <div className="mt-8 flex justify-center gap-4">
+                    <Button size="lg" asChild>
+                    <Link href="/sign-in">Launch App</Link>
+                    </Button>
+                    <Button size="lg" variant="outline" asChild>
+                    <a
+                        href="https://github.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <Github className="mr-2" />
+                        View on GitHub
+                    </a>
+                    </Button>
+                </div>
             </div>
           </div>
         </section>
 
-        <section id="features" className="bg-muted/50 py-20 md:py-24">
+        <section id="features" className="w-full bg-muted/50 py-20 md:py-24">
           <div className="px-4 md:px-6">
             <div className="text-center max-w-2xl mx-auto">
               <h2 className="font-headline text-3xl font-bold tracking-tight">
@@ -133,9 +135,9 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className="py-20 md:py-32">
-          <div className="px-4 md:px-6 max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-2 items-center gap-12">
+        <section className="w-full py-20 md:py-32">
+          <div className="px-4 md:px-6">
+            <div className="grid md:grid-cols-2 items-center gap-12 max-w-6xl mx-auto">
               <div>
                 <Image
                   src="https://placehold.co/600x400.png"

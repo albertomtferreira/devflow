@@ -1,13 +1,18 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import FeaturesHeader from "@/components/features/dashboard/features-header";
+import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 
-export default function BookmarksPage() {
+export default async function BookmarksPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   const isEmpty = true;
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Bookmarks</CardTitle>
+      <FeaturesHeader title={"Bookmarks"} buttonText={"Add Bookmark"} />
         <CardDescription>
           A collection of useful links, articles, and development resources.
         </CardDescription>
@@ -19,7 +24,7 @@ export default function BookmarksPage() {
               <p className="text-muted-foreground">
                 You haven't saved any bookmarks for this project yet.
               </p>
-              <Button>Add Bookmark</Button>
+
             </div>
           </div>
         ) : (

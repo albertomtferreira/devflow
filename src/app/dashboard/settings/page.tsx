@@ -8,7 +8,7 @@ export default function SettingsPage() {
        <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
       </div>
-      <div className="max-w-2xl">
+      <div className="grid gap-6 max-w-2xl">
         <Card>
             <CardHeader>
                 <CardTitle>Appearance</CardTitle>
@@ -20,7 +20,7 @@ export default function SettingsPage() {
                     <ThemeToggle />
                 </div>
                 <p className="text-sm text-muted-foreground mt-2">
-                    Select a light or dark theme for the application. More customization options will be available soon.
+                    Select a light or dark theme for the application.
                 </p>
             </CardContent>
         </Card>

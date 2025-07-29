@@ -38,26 +38,28 @@ export function DashboardSidebar() {
   const pathname = usePathname();
 
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar>
       <SidebarHeader>
-        <div className='flex justify-between items-center gap-2 p-2 group-data-[collapsible=icon]:flex-col group-data-[collapsible=icon]:items-start'>
+        <div className="flex items-center gap-2">
           <Link href="/dashboard" className="flex items-center gap-2">
-            <Code className="h-8 w-8 text-primary " />
-            <span className="text-xl font-bold group-data-[collapsible=icon]:hidden">DevFlow</span>
+            <Code className="h-8 w-8 text-primary" />
+            <span className="text-xl font-bold group-data-[collapsible=icon]:hidden">
+              DevFlow
+            </span>
           </Link>
+          <div className="flex-1" />
           <SidebarTrigger />
         </div>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarMenu >
-          <SidebarMenuItem >
+        <SidebarMenu>
+          <SidebarMenuItem>
             <Link href="/dashboard" legacyBehavior passHref>
-            <SidebarMenuButton
+              <SidebarMenuButton
                 isActive={pathname === '/dashboard'}
                 tooltip="Dashboard"
-                
               >
-                <LayoutGrid  />
+                <LayoutGrid />
                 <span>Dashboard</span>
               </SidebarMenuButton>
             </Link>
@@ -73,9 +75,15 @@ export function DashboardSidebar() {
           <SidebarMenu>
             {mockProjects.map((project) => (
               <SidebarMenuItem key={project.id}>
-                <Link href={`/dashboard/projects/${project.id}`} legacyBehavior passHref>
+                <Link
+                  href={`/dashboard/projects/${project.id}`}
+                  legacyBehavior
+                  passHref
+                >
                   <SidebarMenuButton
-                    isActive={pathname === `/dashboard/projects/${project.id}`}
+                    isActive={pathname.startsWith(
+                      `/dashboard/projects/${project.id}`
+                    )}
                     tooltip={project.name}
                   >
                     <Folder />

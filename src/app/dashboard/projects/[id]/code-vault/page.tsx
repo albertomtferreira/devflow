@@ -1,5 +1,7 @@
-import { AddSnippetDialog } from "@/components/features/code-vault/add-snippet-dialog";
 import { CodeSnippetCard } from "@/components/features/code-vault/code-snippet-card";
+import FeaturesHeader from "@/components/features/dashboard/features-header";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const mockSnippet = {
   id: '1',
@@ -42,16 +44,41 @@ function useLocalStorage<T>(key: string, initialValue: T): [T, (value: T) => voi
 };
 
 
-export default function CodeVaultPage() {
+export default async function CodeVaultPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const isEmpty = false;
+
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold tracking-tight">Code Vault</h2>
-        <AddSnippetDialog />
-      </div>
-      <div>
-        <CodeSnippetCard snippet={mockSnippet} />
-      </div>
-    </div>
+    <>
+      <Card>
+        <CardHeader>
+          <FeaturesHeader title={"Code Vault"} buttonText={"Add Snippet"} />
+          <CardDescription>
+            DESCRIPTION FOR CODE VAULT
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {isEmpty ? (
+            <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[400px]">
+              <div className="flex flex-col items-center gap-2 text-center">
+                <p className="text-muted-foreground">
+                  Your learning log for this project is empty.
+                </p>
+                <Button>Add New Note</Button>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <CodeSnippetCard snippet={mockSnippet} />
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </>
+
   )
 }
