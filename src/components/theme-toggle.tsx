@@ -24,7 +24,7 @@ export function ThemeToggle() {
       {/* DropdownMenuTrigger as a button to open the dropdown */}
       <DropdownMenuTrigger asChild>
         {/* Button with ghost variant and icon size */}
-        <Button variant="ghost" size="icon">
+        <Button variant="ghost" size="icon" >
           {/* Sun icon, visible in light mode and hidden in dark mode with transitions */}
           <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           {/* Moon icon, hidden in light mode and visible in dark mode with transitions */}

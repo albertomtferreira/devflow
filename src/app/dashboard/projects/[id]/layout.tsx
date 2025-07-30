@@ -1,4 +1,5 @@
-// In a real app, you would fetch this data based on the `params.id`
+// src/app/dashboard/projects/[id]/layout.tsx
+
 import { ProjectNav } from "@/components/navigation/project-nav";
 
 const mockProject = {
@@ -17,18 +18,19 @@ export default async function ProjectDetailLayout({
     const { id } = await params;
 
   return (
-    <div>
-      <div className="mb-6">
+    <div className="h-full flex flex-col">
+      <div className="mb-6 flex-shrink-0">
         <h1 className="text-3xl font-bold tracking-tight">{mockProject.title}</h1>
         <p className="text-muted-foreground mt-1">{mockProject.description}</p>
       </div>
 
-      <ProjectNav projectId={id} />
+      <div className="flex-shrink-0 mb-6">
+        <ProjectNav projectId={id} />
+      </div>
       
-      <main className="mt-6">
+      <main className="flex-1 min-h-0">
         {children}
       </main>
-
     </div>
   );
 }

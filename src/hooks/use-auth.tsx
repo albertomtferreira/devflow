@@ -10,22 +10,24 @@ import React, {
   useState,
   ReactNode,
 } from 'react';
-import {User, onAuthStateChanged} from 'firebase/auth';
+import {User, onAuthStateChanged, signOut} from 'firebase/auth';
 // Import Firebase authentication instance
 import {auth} from '@/lib/firebase';
 import {useRouter, usePathname} from 'next/navigation';
+import { useToast } from './use-toast';
 
 // Define the type for the authentication context
 interface AuthContextType {
   user: User | null; // The authenticated user object or null
   loading: boolean; // Indicates if the authentication state is still loading
+  logout: () => Promise<void>; // Add logout function to context
 }
 
 // Create the authentication context with initial values
 const AuthContext = createContext<AuthContextType>({
   user: null,
-  // Initially set loading to true
   loading: true,
+  logout: async () => {}, // Default empty function
 });
 
 export const AuthProvider = ({children}: {children: ReactNode}) => {
@@ -33,6 +35,7 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
+  const { toast } = useToast();
 
   useEffect(() => {
     // Subscribe to authentication state changes
@@ -61,10 +64,27 @@ export const AuthProvider = ({children}: {children: ReactNode}) => {
     }
   }, [user, loading, pathname, router]);
 
+  // Define logout function inside the provider where hooks can be used
+  const logout = async () => {
+    try {
+      await signOut(auth);
+      router.push('/sign-in');
+      toast({
+        title: 'Signed out',
+        description: 'You have been successfully signed out.',
+      });
+    } catch (error) {
+      toast({
+        variant: 'destructive',
+        title: 'Error signing out',
+        description: 'There was a problem signing out. Please try again.',
+      });
+    }
+  };
 
   return (
     // Provide the authentication context value to the children components
-    <AuthContext.Provider value={{user, loading}}>
+    <AuthContext.Provider value={{user, loading, logout}}>
       {children}
     </AuthContext.Provider>
   );

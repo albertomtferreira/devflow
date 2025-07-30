@@ -1,3 +1,5 @@
+//src/app/dashboard/page.tsx
+
 "use client"
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -86,13 +88,10 @@ export default function DashboardPage() {
   }
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
-        <Button>
-          <PlusCircle className="mr-2 h-4 w-4" />
-          New Project
-        </Button>
-      </div>
+  <div className="flex items-center justify-between mb-6">
+    <h1>Projects</h1>
+    <Button>New Project</Button>
+  </div>
        <Card>
         <CardHeader>
           <CardTitle>Your Projects</CardTitle>
