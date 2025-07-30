@@ -58,7 +58,7 @@ export default async function CodeVaultPage({
         <CardHeader>
           <FeaturesHeader title={"Code Vault"} buttonText={"Add Snippet"} />
           <CardDescription>
-            DESCRIPTION FOR CODE VAULT
+            A searchable and taggable repository for your most-used code snippets, custom hooks, and helpful functions.
           </CardDescription>
         </CardHeader>
         <CardContent>
