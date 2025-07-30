@@ -1,4 +1,5 @@
 // src/hooks/use-mobile.tsx
+
 import * as React from "react"
 
 // Define the mobile breakpoint width
