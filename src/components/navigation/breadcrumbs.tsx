@@ -3,6 +3,8 @@
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { mockProjects } from "@/lib/mock-data";
+
 
 // Function to generate breadcrumbs from pathname
 export const generateBreadcrumbs = (path: string) => {
@@ -28,35 +30,22 @@ export const generateBreadcrumbs = (path: string) => {
     }
 
     let displayName = segments[i];
+    const isLast = i === segments.length - 1;
 
-    // Custom display names for specific routes
-    switch (segments[i]) {
-      case "projects":
-        displayName = "Projects";
-        break;
-      case "settings":
-        displayName = "Settings";
-        break;
-      case "1":
-        displayName = "My Awesome App";
-        break;
-      case "2":
-        displayName = "Data Visualizer";
-        break;
-      case "3":
-        displayName = "Learning Go";
-        break;
-      default:
+    if (segments[i-1] === "projects" && !isNaN(Number(segments[i]))) {
+        const project = mockProjects.find(p => p.id === segments[i]);
+        displayName = project?.title || "Project";
+    } else {
         // Capitalize first letter and replace hyphens/underscores with spaces
         displayName = segments[i]
           .replace(/[-_]/g, " ")
           .replace(/\b\w/g, (l) => l.toUpperCase());
     }
-
+    
     breadcrumbs.push({
       name: displayName,
       path: currentPath,
-      isLast: i === segments.length - 1,
+      isLast: isLast,
     });
   }
 

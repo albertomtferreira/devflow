@@ -3,20 +3,16 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { mockProjects } from "@/lib/mock-data";
 import { ExternalLink, Github } from "lucide-react";
 
-const mockProject = {
-  id: "1",
-  title: "Portfolio Website",
-  description:
-    "A personal portfolio to showcase my skills and projects. Built with Next.js and Tailwind CSS.",
-  techStack: ["Next.js", "React", "Tailwind CSS", "TypeScript", "Vercel"],
-  skills: ["Frontend Development", "UI/UX Design", "Responsive Design", "SEO"],
-  liveUrl: "https://example.com",
-  repoUrl: "https://github.com/example/portfolio",
-};
+export default function OverviewPage({ params }: { params: { id: string } }) {
+  const project = mockProjects.find(p => p.id === params.id);
 
-export default function OverviewPage() {
+  if (!project) {
+    return <div>Project not found</div>;
+  }
+  
   return (
     <div className="grid gap-6 md:grid-cols-3">
       <div className="md:col-span-2">
@@ -27,12 +23,10 @@ export default function OverviewPage() {
           <CardContent className="space-y-4">
             <p>
               This is where you would have a detailed project description,
-              possibly editable with a markdown editor.
+              possibly editable with a markdown editor. For now, it's showing the project's main description:
             </p>
             <p className="text-muted-foreground">
-              The project detail pages are designed to be the central hub for
-              everything related to a specific project, from its core concepts
-              to its development lifecycle.
+             {project.description}
             </p>
           </CardContent>
         </Card>
@@ -45,7 +39,7 @@ export default function OverviewPage() {
           <CardContent className="flex flex-col gap-3">
             <Button variant="outline" asChild>
               <a
-                href={mockProject.liveUrl ?? "#"}
+                href={project.liveUrl ?? "#"}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -54,7 +48,7 @@ export default function OverviewPage() {
             </Button>
             <Button variant="outline" asChild>
               <a
-                href={mockProject.repoUrl ?? "#"}
+                href={project.repoUrl ?? "#"}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -68,24 +62,28 @@ export default function OverviewPage() {
             <CardTitle>Tech Stack & Skills</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
-            <div>
-              <h3 className="font-semibold mb-2">Tech Stack</h3>
-              <div className="flex flex-wrap gap-2">
-                {mockProject.techStack.map((tech) => (
-                  <Badge key={tech}>{tech}</Badge>
-                ))}
+            {project.techStack && project.techStack.length > 0 && (
+              <div>
+                <h3 className="font-semibold mb-2">Tech Stack</h3>
+                <div className="flex flex-wrap gap-2">
+                  {project.techStack.map((tech) => (
+                    <Badge key={tech}>{tech}</Badge>
+                  ))}
+                </div>
               </div>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-2">Skills</h3>
-              <div className="flex flex-wrap gap-2">
-                {mockProject.skills.map((skill) => (
-                  <Badge key={skill} variant="secondary">
-                    {skill}
-                  </Badge>
-                ))}
+            )}
+            {project.skills && project.skills.length > 0 && (
+              <div>
+                <h3 className="font-semibold mb-2">Skills</h3>
+                <div className="flex flex-wrap gap-2">
+                  {project.skills.map((skill) => (
+                    <Badge key={skill} variant="secondary">
+                      {skill}
+                    </Badge>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </CardContent>
         </Card>
       </div>

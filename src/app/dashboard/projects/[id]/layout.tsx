@@ -2,15 +2,9 @@
 "use client";
 
 import { ProjectNav } from "@/components/navigation/project-nav";
+import { mockProjects } from "@/lib/mock-data";
 import { useParams } from "next/navigation";
 
-// This would typically come from your data layer
-const mockProject = {
-  id: "1",
-  title: "Portfolio Website",
-  description:
-    "A personal portfolio to showcase my skills and projects. Built with Next.js and Tailwind CSS.",
-};
 
 export default function ProjectDetailLayout({
   children,
@@ -20,13 +14,18 @@ export default function ProjectDetailLayout({
   const params = useParams();
   const id = params.id as string;
 
+  const project = mockProjects.find(p => p.id === id) || {
+    title: "Project Not Found",
+    description: "Please select a project from the dashboard."
+  };
+
   return (
     <div className="h-full flex flex-col">
       <div className="mb-6 flex-shrink-0">
         <h1 className="text-3xl font-bold tracking-tight">
-          {mockProject.title}
+          {project.title}
         </h1>
-        <p className="text-muted-foreground mt-1">{mockProject.description}</p>
+        <p className="text-muted-foreground mt-1">{project.description}</p>
       </div>
 
       <div className="flex-shrink-0 mb-6 border-b">

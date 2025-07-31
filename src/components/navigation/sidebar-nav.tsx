@@ -4,15 +4,12 @@
 import * as React from "react";
 import {
   Bell,
-  BookOpen,
   ChevronsUpDown,
   Code,
   CreditCard,
   LayoutGrid,
   LogOut,
   Moon,
-  PieChart,
-  Rocket,
   Settings,
   Sparkles,
   Sun,
@@ -47,14 +44,7 @@ import { useAuth } from "@/hooks/use-auth";
 import Link from "next/link";
 import { useTheme } from "../theme-provider";
 import { usePathname } from "next/navigation";
-
-interface NavItem {
-  id: string;
-  title: string;
-  icon: React.ComponentType<{ className?: string }>;
-  href?: string;
-  items?: NavItem[];
-}
+import { NavItem, projectNavItems } from "@/lib/mock-data";
 
 const platformNavItems: NavItem[] = [
   {
@@ -62,27 +52,6 @@ const platformNavItems: NavItem[] = [
     title: "Dashboard",
     icon: LayoutGrid,
     href: "/dashboard",
-  },
-];
-
-const projectNavItems: NavItem[] = [
-  {
-    id: "1",
-    title: "My Awesome App",
-    icon: Rocket,
-    href: "/dashboard/projects/1",
-  },
-  {
-    id: "2",
-    title: "Data Visualizer",
-    icon: PieChart,
-    href: "/dashboard/projects/2",
-  },
-  {
-    id: "3",
-    title: "Learning Go",
-    icon: BookOpen,
-    href: "/dashboard/projects/3",
   },
 ];
 
@@ -145,7 +114,7 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
                     tooltip={project.title}
                     asChild
                   >
-                    <Link href={`/dashboard/projects/${project.id}`}>
+                    <Link href={project.href!}>
                       <project.icon className="size-4" />
                       <span>{project.title}</span>
                     </Link>

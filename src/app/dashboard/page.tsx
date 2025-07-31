@@ -19,43 +19,11 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useAuth } from '@/hooks/use-auth';
+import { mockProjects, ProjectStatus } from '@/lib/mock-data';
 import { cn } from '@/lib/utils';
 import { PlusCircle, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-
-type ProjectStatus = 'online' | 'offline' | 'in-progress';
-
-const mockProjects = [
-  {
-    id: '1',
-    title: 'Portfolio Website',
-    description: 'A personal portfolio to showcase my skills and projects.',
-    status: 'online' as ProjectStatus,
-    role: 'Owner',
-  },
-  {
-    id: '2',
-    title: 'Task Management App',
-    description: 'A full-stack task manager with user authentication.',
-    status: 'in-progress' as ProjectStatus,
-    role: 'Contributor',
-  },
-  {
-    id: '3',
-    title: 'E-commerce Store API',
-    description: 'A RESTful API for an online store, built with Node.js.',
-    status: 'offline' as ProjectStatus,
-    role: 'Owner',
-  },
-  {
-    id: '4',
-    title: 'Markdown Blog',
-    description: 'A static-generated blog created with Astro.',
-    status: 'online' as ProjectStatus,
-    role: 'Owner',
-  },
-];
 
 const statusClasses: Record<ProjectStatus, string> = {
     online: 'bg-green-500',
