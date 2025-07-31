@@ -10,6 +10,8 @@
 ## 🚀 v0.2.0: Next Steps & Enhancements
 - [ ] **Implement Full CRUD for Projects:** Add functionality to create, update, and delete projects.
 - [ ] **Flesh out Project Features:** Build the UI and logic for the Learning Log, Bookmarks, and File Uploads.
+    -[ ] **Overview:** Build UI and logic for the Overview page
+        -[ ] **Editable Fields:** Make the fields editable by eith
 - [ ] **Connect to a Real Database:** Replace all mock data with a Firestore database to persist user data.
 - [ ] **Enhance Code Vault:** Add search and filtering capabilities to the Code Vault.
 - [ ] **Improve AI:** Refine AI prompts and introduce more generative AI features across the app.
