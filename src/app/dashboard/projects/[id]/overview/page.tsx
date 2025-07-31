@@ -40,31 +40,6 @@ export default function OverviewPage() {
       <div className="space-y-6">
         <Card>
           <CardHeader>
-            <CardTitle>Tech Stack & Skills</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-4">
-            <div>
-              <h3 className="font-semibold mb-2">Tech Stack</h3>
-              <div className="flex flex-wrap gap-2">
-                {mockProject.techStack.map((tech) => (
-                  <Badge key={tech}>{tech}</Badge>
-                ))}
-              </div>
-            </div>
-            <div>
-              <h3 className="font-semibold mb-2">Skills</h3>
-              <div className="flex flex-wrap gap-2">
-                {mockProject.skills.map((skill) => (
-                  <Badge key={skill} variant="secondary">
-                    {skill}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
             <CardTitle>Links</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
@@ -86,6 +61,31 @@ export default function OverviewPage() {
                 <Github className="mr-2 h-4 w-4" /> GitHub Repo
               </a>
             </Button>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Tech Stack & Skills</CardTitle>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
+            <div>
+              <h3 className="font-semibold mb-2">Tech Stack</h3>
+              <div className="flex flex-wrap gap-2">
+                {mockProject.techStack.map((tech) => (
+                  <Badge key={tech}>{tech}</Badge>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-2">Skills</h3>
+              <div className="flex flex-wrap gap-2">
+                {mockProject.skills.map((skill) => (
+                  <Badge key={skill} variant="secondary">
+                    {skill}
+                  </Badge>
+                ))}
+              </div>
+            </div>
           </CardContent>
         </Card>
       </div>
