@@ -20,7 +20,10 @@ export default async function VersionsPage({
   return (
     <Card>
       <CardHeader>
-      <FeaturesHeader title={"Version History"} buttonText={"Log New Version"} />
+        <FeaturesHeader
+          title={"Version History"}
+          buttonText={"Log New Version"}
+        />
         <CardDescription>
           Track project versions, milestones, and release history.
         </CardDescription>
@@ -29,19 +32,14 @@ export default async function VersionsPage({
         {isEmpty ? (
           <div className="flex flex-1 items-center justify-center rounded-lg border border-dashed shadow-sm min-h-[400px]">
             <div className="flex flex-col items-center gap-2 text-center">
-              <GitBranch className="h-10 w-10 text-muted-foreground" />
-              <h3 className="text-xl font-bold tracking-tight">
-                No Versions Tracked
-              </h3>
               <p className="text-muted-foreground">
                 No versions have been tracked for this project yet.
               </p>
-              <Button className="mt-4">Log New Version</Button>
             </div>
           </div>
         ) : (
           <div>
-            {/* This is where the list of versions would be rendered */}
+            {/* This is where the list of bookmarks would be rendered */}
           </div>
         )}
       </CardContent>

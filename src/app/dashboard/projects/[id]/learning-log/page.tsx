@@ -1,6 +1,14 @@
+// src/app/dashboard/projects/[id]/learning-log/page.tsx
+
 import FeaturesHeader from "@/components/features/dashboard/features-header";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function LearningLogPage() {
   // In a real app, you would check if there are any log entries.
@@ -12,8 +20,8 @@ export default function LearningLogPage() {
         <CardHeader>
           <FeaturesHeader title={"Learning Log"} buttonText={"Add New Note"} />
           <CardDescription>
-            A place to document insights, store AI prompts, and keep track of what
-            you've learned.
+            A place to document insights, store AI prompts, and keep track of
+            what you've learned.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -23,7 +31,6 @@ export default function LearningLogPage() {
                 <p className="text-muted-foreground">
                   Your learning log for this project is empty.
                 </p>
-
               </div>
             </div>
           ) : (
