@@ -1,5 +1,4 @@
 //src/app/dashboard/page.tsx
-
 "use client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -19,36 +18,74 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useAuth } from "@/hooks/use-auth";
-import { mockProjects } from "@/lib/mock-data";
-import { projectStatusConfig } from "@/lib/types";
+import { Project, projectStatusConfig } from "@/lib/types";
 import { cn } from "@/lib/utils";
-import { PlusCircle, ArrowUpRight } from "lucide-react";
+import { PlusCircle, ArrowUpRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  Timestamp,
+} from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { useEffect, useState } from "react";
+
+async function getProjects(userId: string): Promise<Project[]> {
+  const projectsCol = collection(db, "projects");
+  const q = query(projectsCol, where("userId", "==", userId));
+  const querySnapshot = await getDocs(q);
+  const projects = querySnapshot.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      ...data,
+      // Firestore Timestamps need to be converted to be serializable
+      createdAt: (data.createdAt as Timestamp)?.toDate().toISOString(),
+    } as Project;
+  });
+  return projects;
+}
 
 export default function DashboardPage() {
-  const { user, loading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const router = useRouter();
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  if (loading) {
+  useEffect(() => {
+    if (user) {
+      getProjects(user.uid)
+        .then((userProjects) => {
+          setProjects(userProjects);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching projects:", error);
+          setLoading(false);
+        });
+    } else if (!authLoading) {
+      // If auth is done loading and there's no user, redirect.
+      router.push("/sign-in");
+    }
+  }, [user, authLoading, router]);
+
+  if (authLoading || loading) {
     return (
-      <div className="flex items-center justify-center">
-        <p>Loading...</p>
+      <div className="flex items-center justify-center h-full">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
-  if (!user) {
-    router.push("/sign-in");
-    return null;
-  }
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1>Projects</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
         <Button>
-          {" "}
-          <PlusCircle /> New Project
+          <PlusCircle className="mr-2 h-4 w-4" /> New Project
         </Button>
       </div>
       <Card>
@@ -59,52 +96,69 @@ export default function DashboardPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Project</TableHead>
-                <TableHead className="w-[150px]">Status</TableHead>
-                <TableHead className="w-[150px]">Role</TableHead>
-                <TableHead className="w-[100px] text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {mockProjects.map((project) => {
-                return (
-                  <TableRow key={project.id}>
-                    <TableCell>
-                      <div className="font-medium">{project.title}</div>
-                      <div className="text-sm text-muted-foreground line-clamp-1">
-                        {project.description}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <span
-                          className={cn(
-                            "h-2 w-2 rounded-full",
-                            projectStatusConfig[project.status].className
-                          )}
-                        />
-                        <span>{projectStatusConfig[project.status].text}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{project.role}</Badge>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Button variant="ghost" size="icon" asChild>
-                        <Link href={`/dashboard/projects/${project.id}`}>
-                          <ArrowUpRight className="h-4 w-4" />
-                          <span className="sr-only">View Project</span>
-                        </Link>
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
+          {projects.length === 0 ? (
+            <div className="flex flex-col items-center justify-center text-center py-12">
+              <h3 className="text-xl font-semibold mb-2">No Projects Yet</h3>
+              <p className="text-muted-foreground mb-4">
+                Click "New Project" to get started.
+              </p>
+              <Button>
+                <PlusCircle className="mr-2 h-4 w-4" /> New Project
+              </Button>
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Project</TableHead>
+                  <TableHead className="w-[150px]">Status</TableHead>
+                  <TableHead className="w-[150px]">Role</TableHead>
+                  <TableHead className="w-[100px] text-right">
+                    Actions
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {projects.map((project) => {
+                  return (
+                    <TableRow key={project.id}>
+                      <TableCell>
+                        <div className="font-medium">{project.title}</div>
+                        <div className="text-sm text-muted-foreground line-clamp-1">
+                          {project.description}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={cn(
+                              "h-2 w-2 rounded-full",
+                              projectStatusConfig[project.status]?.className ??
+                                "bg-gray-400"
+                            )}
+                          />
+                          <span>
+                            {projectStatusConfig[project.status]?.text ?? "Unknown"}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">{project.role}</Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button variant="ghost" size="icon" asChild>
+                          <Link href={`/dashboard/projects/${project.id}`}>
+                            <ArrowUpRight className="h-4 w-4" />
+                            <span className="sr-only">View Project</span>
+                          </Link>
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          )}
         </CardContent>
       </Card>
     </div>

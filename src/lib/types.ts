@@ -57,6 +57,7 @@ export interface Project {
   liveUrl?: string;
   repoUrl?: string;
   tags?: string[];
+  createdAt: string; // Storing as ISO string for serializability
 }
 
 // Code Vault
