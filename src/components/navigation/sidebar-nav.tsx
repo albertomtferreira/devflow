@@ -14,6 +14,7 @@ import {
   Sparkles,
   Sun,
   User,
+  Rocket,
 } from "lucide-react";
 import {
   Sidebar,
@@ -44,10 +45,12 @@ import { useAuth } from "@/hooks/use-auth";
 import Link from "next/link";
 import { useTheme } from "../theme-provider";
 import { usePathname } from "next/navigation";
-import { projectNavItems } from "@/lib/mock-data";
-import { NavItem } from "@/lib/types";
+import { Project } from "@/lib/types";
+import { collection, query, where, getDocs, onSnapshot } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { SidebarMenuSkeleton } from "../ui/sidebar";
 
-const platformNavItems: NavItem[] = [
+const platformNavItems = [
   {
     id: "dashboard",
     title: "Dashboard",
@@ -56,12 +59,48 @@ const platformNavItems: NavItem[] = [
   },
 ];
 
+async function getProjects(userId: string): Promise<Project[]> {
+  const projectsCol = collection(db, "projects");
+  const q = query(projectsCol, where("userId", "==", userId));
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map(
+    (doc) =>
+      ({
+        id: doc.id,
+        ...doc.data(),
+      } as Project)
+  );
+}
+
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {}
 
 export function AppSidebar({ ...props }: AppSidebarProps) {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const { setTheme } = useTheme();
   const pathname = usePathname();
+  const [projects, setProjects] = React.useState<Project[]>([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    if (user) {
+      setLoading(true);
+      const projectsQuery = query(collection(db, "projects"), where("userId", "==", user.uid));
+      
+      const unsubscribe = onSnapshot(projectsQuery, (snapshot) => {
+        const userProjects = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        } as Project));
+        setProjects(userProjects);
+        setLoading(false);
+      }, (error) => {
+        console.error("Error fetching projects in real-time:", error);
+        setLoading(false);
+      });
+
+      return () => unsubscribe();
+    }
+  }, [user]);
 
   return (
     <Sidebar variant="inset" className="border-r " {...props}>
@@ -106,22 +145,29 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
           <SidebarGroupLabel>Projects</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {projectNavItems.map((project) => (
-                <SidebarMenuItem key={project.id}>
-                  <SidebarMenuButton
-                    isActive={pathname.startsWith(
-                      `/dashboard/projects/${project.id}`
-                    )}
-                    tooltip={project.title}
-                    asChild
-                  >
-                    <Link href={project.href!}>
-                      <project.icon className="size-4" />
-                      <span>{project.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {loading ? (
+                <>
+                  <SidebarMenuSkeleton showIcon/>
+                  <SidebarMenuSkeleton showIcon/>
+                </>
+              ) : (
+                projects.map((project) => (
+                  <SidebarMenuItem key={project.id}>
+                    <SidebarMenuButton
+                      isActive={pathname.startsWith(
+                        `/dashboard/projects/${project.id}`
+                      )}
+                      tooltip={project.title}
+                      asChild
+                    >
+                      <Link href={`/dashboard/projects/${project.id}`}>
+                        <Rocket className="size-4" />
+                        <span>{project.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))
+              )}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

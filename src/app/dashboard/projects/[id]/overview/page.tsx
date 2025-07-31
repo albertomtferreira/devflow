@@ -1,18 +1,38 @@
 // src/app/dashboard/projects/[id]/overview/page.tsx
+'use client'
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { mockProjects } from "@/lib/mock-data";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink, Github, Loader2 } from "lucide-react";
+import { getProject } from "@/lib/actions/projects";
+import { Project } from "@/lib/types";
+import { useEffect, useState } from "react";
 
-export default async function OverviewPage({
+export default function OverviewPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const { id } = await params;
-  const project = mockProjects.find((p) => p.id === id);
+  const { id } = params;
+  const [project, setProject] = useState<Project | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (id) {
+      getProject(id)
+        .then(setProject)
+        .finally(() => setLoading(false));
+    }
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   if (!project) {
     return <div>Project not found</div>;
@@ -87,6 +107,9 @@ export default async function OverviewPage({
                   ))}
                 </div>
               </div>
+            )}
+            {(!project.techStack || project.techStack.length === 0) && (!project.skills || project.skills.length === 0) && (
+              <p className="text-sm text-muted-foreground">No tech stack or skills have been added yet.</p>
             )}
           </CardContent>
         </Card>
