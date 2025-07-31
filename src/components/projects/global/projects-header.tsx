@@ -6,22 +6,30 @@ import { Project } from "@/lib/types";
 import { Settings, Loader2 } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function ProjectsHeader() {
   const params = useParams();
   const id = params.id as string;
+  const { user, loading: authLoading } = useAuth();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (id) {
+    // Only fetch if auth is complete and we have a user and an id.
+    if (!authLoading && user && id) {
+      setLoading(true);
       getProject(id)
         .then(setProject)
         .finally(() => setLoading(false));
+    } else if (!authLoading && !user) {
+      // If auth is done and there's no user, stop loading.
+      setLoading(false);
     }
-  }, [id]);
+  }, [id, user, authLoading]);
 
-  if (loading) {
+  // Combined loading state
+  if (authLoading || loading) {
     return (
       <div className="flex justify-between">
         <div className="mb-6 flex-shrink-0">
@@ -30,7 +38,7 @@ export default function ProjectsHeader() {
         </div>
         <div>
           <Button disabled>
-            <Settings />
+            <Loader2 className="animate-spin" />
           </Button>
         </div>
       </div>

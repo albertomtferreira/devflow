@@ -8,6 +8,7 @@ import { ExternalLink, Github, Loader2 } from "lucide-react";
 import { getProject } from "@/lib/actions/projects";
 import { Project } from "@/lib/types";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
 
 export default function OverviewPage({
   params,
@@ -15,27 +16,32 @@ export default function OverviewPage({
   params: { id: string };
 }) {
   const { id } = params;
+  const { user, loading: authLoading } = useAuth();
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (id) {
+    // Only fetch if auth is complete and we have a user and an id.
+    if (!authLoading && user && id) {
+      setLoading(true);
       getProject(id)
         .then(setProject)
         .finally(() => setLoading(false));
+    } else if (!authLoading && !user) {
+      setLoading(false);
     }
-  }, [id]);
+  }, [id, user, authLoading]);
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className="flex items-center justify-center h-full pt-16">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
   if (!project) {
-    return <div>Project not found</div>;
+    return <div className="text-center pt-16">Project not found or you do not have permission to view it.</div>;
   }
 
   return (
