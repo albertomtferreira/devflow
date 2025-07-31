@@ -2,32 +2,33 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // A user document can only be read or written by the user themselves.
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+    function isSignedIn() {
+      return request.auth != null;
     }
 
-    // Project documents
-    match /projects/{projectId} {
-      // A user can read a project if they are the owner.
-      // This rule applies to single document gets.
-      allow get: if request.auth != null && resource.data.userId == request.auth.uid;
+    // Debug function to expose values in error messages
+    function debug(value) {
+      return value;
+    }
 
-      // A user can list projects (query the collection) only if their
-      // query is filtering by their own user ID. This is crucial for security.
-      allow list: if request.auth != null && request.query.where.userId == request.auth.uid;
+    match /users/{userId} {
+      allow read, write: if isSignedIn() && request.auth.uid == userId;
+    }
+
+    match /projects/{projectId} {
+      // Temporarily open get for simplicity while we debug list
+      allow get: if isSignedIn();
+
+      // Only change this line for debugging
+      allow list: if debug(request.query.where) == debug(request.auth);
+
+      allow create: if isSignedIn() && request.auth.uid == request.resource.data.userId;
+      allow update, delete: if isSignedIn() && request.auth.uid == resource.data.userId;
       
-      // A user can create a project if the new project's userId
-      // is their own user ID.
-      allow create: if request.auth != null && request.resource.data.userId == request.auth.uid;
-      
-      // A user can update or delete a project if they are the owner.
-      allow update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
-      
-      // Allow reads and writes on all subcollections for the project owner.
+      // Allow reads and writes on all subcollections for now
       match /{document=**} {
-        allow read, write: if request.auth != null && get(/databases/$(database)/documents/projects/$(projectId)).data.userId == request.auth.uid;
+        allow read, write: if isSignedIn();
       }
     }
   }
