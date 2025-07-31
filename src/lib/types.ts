@@ -16,27 +16,26 @@ export interface NavLinks {
   disabled?: boolean;
 }
 
-
 // Project-specific
 export type ProjectStatus = "online" | "offline" | "in-progress" | "crashed";
 
 export const projectStatusConfig = {
   online: {
-    text: 'Online',
-    className: 'bg-green-500'
+    text: "Online",
+    className: "bg-green-500",
   },
   offline: {
-    text: 'Offline',
-    className: 'bg-gray-500'
+    text: "Offline",
+    className: "bg-gray-500",
   },
-  'in-progress': {
-    text: 'In Progress',
-    className: 'bg-yellow-500'
+  "in-progress": {
+    text: "In Progress",
+    className: "bg-yellow-500",
   },
-  'crashed': {
-    text: 'Crashed',
-    className: 'bg-red-500'
-  }
+  crashed: {
+    text: "Crashed",
+    className: "bg-red-500",
+  },
 } as const satisfies Record<ProjectStatus, { text: string; className: string }>;
 
 //Project Details Header
@@ -45,7 +44,6 @@ export interface ProjectsDetailsHeaderProps {
   buttonText?: string;
   onAction?: () => void;
 }
-
 
 //Overview
 export interface Project {
