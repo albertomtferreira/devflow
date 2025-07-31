@@ -39,8 +39,15 @@ export const projectStatusConfig = {
   }
 } as const satisfies Record<ProjectStatus, { text: string; className: string }>;
 
+//Project Details Header
+export interface ProjectsDetailsHeaderProps {
+  title: string;
+  buttonText?: string;
+  onAction?: () => void;
+}
 
 
+//Overview
 export interface Project {
   id: string;
   title: string;

@@ -1,4 +1,4 @@
-import FeaturesHeader from "@/components/features/dashboard/features-header";
+import ProjectsDetailsHeader from "@/components/projects/global/projects-details-header";
 import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 
 export default async function BookmarksPage({
@@ -12,7 +12,7 @@ export default async function BookmarksPage({
   return (
     <Card>
       <CardHeader>
-      <FeaturesHeader title={"Bookmarks"} buttonText={"Add Bookmark"} />
+      <ProjectsDetailsHeader title={"Bookmarks"} buttonText={"Add Bookmark"} />
         <CardDescription>
           A collection of useful links, articles, and development resources.
         </CardDescription>

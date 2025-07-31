@@ -1,6 +1,6 @@
 import { NavLinks } from "./types";
 
-export const projectsNavLinks: NavLinks[] = [
+export const projectsDetailsNavLinks: NavLinks[] = [
     { name: "Overview", href: "/overview" },
     { name: "Roadmap", href: "/roadmap" },
     { name: "Code Vault", href: "/code-vault" },

@@ -18,4 +18,8 @@
 - [x] **navLinks:** Have all navLinks moved to one folder inside /lib/
 src/components/navigation/project-nav.tsx
 - [x] **Interfaces/Types:** Centralize all Interface and Type statements into one document
+- [x] **Rename and Reorganise file structure:** Make sense of the /components/projects and reorganise and rename as necessary
 
+## 🐛 Bugs & Fixes
+- [ ] **Traffic lights System:** The status of the projects on the Dashboards is not showing the color of the status
+- [ ] **Plus Circle New Project:** The + circle on the dashboard "New Project" button is not showing

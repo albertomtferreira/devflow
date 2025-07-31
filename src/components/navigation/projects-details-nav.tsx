@@ -1,21 +1,25 @@
-// src/components/navigation/project-nav.tsx
+// src/components/navigation/project-details-nav.tsx
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { projectsNavLinks } from "@/lib/nav-links-projects";
+import { projectsDetailsNavLinks } from "@/lib/nav-links-projects";
 
-export function ProjectNav({ projectId }: { projectId: string }) {
+export function ProjectsDetailsNav() {
+  
   const pathname = usePathname();
+  const params = useParams();
+  const id = params.id as string;
 
   return (
-    <nav
+    <div className="flex-shrink-0 mb-6 border-b">
+          <nav
       className="-mb-px flex justify-between space-x-4 sm:space-x-6 overflow-x-auto scrollbar-hide"
       aria-label="Tabs"
     >
-      {projectsNavLinks.map((link) => {
-        const fullHref = `/dashboard/projects/${projectId}${link.href}`;
+      {projectsDetailsNavLinks.map((link) => {
+        const fullHref = `/dashboard/projects/${id}${link.href}`;
         const isActive = pathname === fullHref;
         return (
           <Link
@@ -36,5 +40,7 @@ export function ProjectNav({ projectId }: { projectId: string }) {
         );
       })}
     </nav>
+    </div>
+
   );
 }

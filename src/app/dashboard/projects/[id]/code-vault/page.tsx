@@ -1,5 +1,5 @@
-import { CodeSnippetCard } from "@/components/features/code-vault/code-snippet-card";
-import FeaturesHeader from "@/components/features/dashboard/features-header";
+import { CodeSnippetCard } from "@/components/projects/code-vault/code-snippet-card";
+import ProjectsDetailsHeader from "@/components/projects/global/projects-details-header";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,7 +23,7 @@ export default async function CodeVaultPage({
     <>
       <Card>
         <CardHeader>
-          <FeaturesHeader title={"Code Vault"} buttonText={"Add Snippet"} />
+          <ProjectsDetailsHeader title={"Code Vault"} buttonText={"Add Snippet"} />
           <CardDescription>
             A searchable and taggable repository for your most-used code
             snippets, custom hooks, and helpful functions.

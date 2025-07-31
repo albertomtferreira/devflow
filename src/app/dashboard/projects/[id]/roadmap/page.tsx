@@ -1,5 +1,5 @@
 // src/app/dashboard/projects/[id]/roadmap/page.tsx
-import FeaturesHeader from "@/components/features/dashboard/features-header";
+import ProjectsDetailsHeader from "@/components/projects/global/projects-details-header";
 import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import fs from "fs/promises";
@@ -12,7 +12,7 @@ export default async function RoadmapPage() {
   return (
     <Card className="h-full flex flex-col">
       <CardHeader className="flex-shrink-0">
-        <FeaturesHeader title={"Roadmap"} buttonText={"Save Roadmap"} />
+        <ProjectsDetailsHeader title={"Roadmap"} buttonText={"Save Roadmap"} />
         <CardDescription>Track your project's progress with a markdown-style task list and changelog.</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col min-h-0">

@@ -1,13 +1,11 @@
 // src/app/dashboard/projects/[id]/learning-log/page.tsx
 
-import FeaturesHeader from "@/components/features/dashboard/features-header";
-import { Button } from "@/components/ui/button";
+import ProjectsDetailsHeader from "@/components/projects/global/projects-details-header";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 
 export default function LearningLogPage() {
@@ -18,7 +16,7 @@ export default function LearningLogPage() {
     <>
       <Card>
         <CardHeader>
-          <FeaturesHeader title={"Learning Log"} buttonText={"Add New Note"} />
+          <ProjectsDetailsHeader title={"Learning Log"} buttonText={"Add New Note"} />
           <CardDescription>
             A place to document insights, store AI prompts, and keep track of
             what you've learned.

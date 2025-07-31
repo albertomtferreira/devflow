@@ -12,19 +12,17 @@ import {
     LucideIcon, 
     Save
 } from "lucide-react";
+import { ProjectsDetailsHeaderProps } from "@/lib/types";
 
-interface FeaturesHeaderProps {
-    title: string;
-    buttonText?: string;
-    onAction?: () => void;
-}
 
-export default function FeaturesHeader({
+
+export default function ProjectsDetailsHeader({
     title,
     buttonText,
     onAction,
-}: FeaturesHeaderProps) {
+}: ProjectsDetailsHeaderProps) {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+const configButtonText = buttonText || "Action";
 
     // Configuration object with all title settings
     const titleConfigs: Record<string, {
@@ -34,13 +32,13 @@ export default function FeaturesHeader({
         icon: LucideIcon;
     }> = {
         "Code Vault": {
-            buttonText: "Add Snippet",
+            buttonText: configButtonText,
             action: () => setIsDialogOpen(true),
             hasDialog: true,
             icon: PlusCircle,
         },
         "Learning Log": {
-            buttonText: "Add New Note", 
+            buttonText: configButtonText, 
             action: () => {
                 console.log("Opening Learning Log form");
                 onAction?.();
@@ -49,7 +47,7 @@ export default function FeaturesHeader({
             icon: FileText,
         },
         "Version History": {
-            buttonText: "Log New Version", 
+            buttonText: configButtonText, 
             action: () => {
                 console.log("Opening Version History form");
                 onAction?.();
@@ -58,7 +56,7 @@ export default function FeaturesHeader({
             icon: GitBranch,
         },
         "Roadmap": {
-            buttonText: "Save Roadmap", 
+            buttonText: configButtonText, 
             action: () => {
                 console.log("Saving Roadmap");
                 onAction?.();
@@ -67,7 +65,7 @@ export default function FeaturesHeader({
             icon: Save,
         },
         "Files and Assets": {
-            buttonText: "Upload File", 
+            buttonText: configButtonText, 
             action: () => {
                 console.log("Uploading File");
                 onAction?.();
@@ -76,7 +74,7 @@ export default function FeaturesHeader({
             icon: Upload,
         },
         "Bookmarks": {
-            buttonText: "Add Bookmark", 
+            buttonText: configButtonText, 
             action: () => {
                 console.log("Adding Bookmark");
                 onAction?.();

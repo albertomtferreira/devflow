@@ -1,11 +1,9 @@
-import FeaturesHeader from "@/components/features/dashboard/features-header";
-import { Button } from "@/components/ui/button";
+import ProjectsDetailsHeader from "@/components/projects/global/projects-details-header";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { GitBranch } from "lucide-react";
 
@@ -20,7 +18,7 @@ export default async function VersionsPage({
   return (
     <Card>
       <CardHeader>
-        <FeaturesHeader
+        <ProjectsDetailsHeader
           title={"Version History"}
           buttonText={"Log New Version"}
         />

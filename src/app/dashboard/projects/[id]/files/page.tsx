@@ -1,6 +1,7 @@
-import FeaturesHeader from "@/components/features/dashboard/features-header";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+
+
+import ProjectsDetailsHeader from "@/components/projects/global/projects-details-header";
+import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 
 export default async function FilesPage({
   params,
@@ -13,7 +14,7 @@ export default async function FilesPage({
   return (
     <Card>
       <CardHeader>
-        <FeaturesHeader title={"Files and Assets"} buttonText={"Upload File"} />
+        <ProjectsDetailsHeader title={"Files and Assets"} buttonText={"Upload File"} />
         <CardDescription>
           Manage project-related files like screenshots, diagrams, and other assets.
         </CardDescription>
