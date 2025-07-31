@@ -13,3 +13,9 @@
 - [ ] **Connect to a Real Database:** Replace all mock data with a Firestore database to persist user data.
 - [ ] **Enhance Code Vault:** Add search and filtering capabilities to the Code Vault.
 - [ ] **Improve AI:** Refine AI prompts and introduce more generative AI features across the app.
+
+## File structure reorganising
+- [x] **navLinks:** Have all navLinks moved to one folder inside /lib/
+src/components/navigation/project-nav.tsx
+- [ ] **Interfaces/Types:** Centralize all Interface and Type statements into one document
+

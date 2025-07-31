@@ -4,17 +4,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-
-const navLinks = [
-  { name: "Overview", href: "/overview" },
-  { name: "Roadmap", href: "/roadmap" },
-  { name: "Code Vault", href: "/code-vault" },
-  { name: "Learning Log", href: "/learning-log" },
-  { name: "Bookmarks", href: "/bookmarks" },
-  { name: "Files", href: "/files" },
-  { name: "Versions", href: "/versions" },
-  { name: "GitHub", href: "/github", disabled: true },
-];
+import { projectsNavLinks } from "@/lib/nav-links-projects";
 
 export function ProjectNav({ projectId }: { projectId: string }) {
   const pathname = usePathname();
@@ -24,7 +14,7 @@ export function ProjectNav({ projectId }: { projectId: string }) {
       className="-mb-px flex justify-between space-x-4 sm:space-x-6 overflow-x-auto scrollbar-hide"
       aria-label="Tabs"
     >
-      {navLinks.map((link) => {
+      {projectsNavLinks.map((link) => {
         const fullHref = `/dashboard/projects/${projectId}${link.href}`;
         const isActive = pathname === fullHref;
         return (
