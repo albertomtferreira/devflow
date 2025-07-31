@@ -36,12 +36,13 @@ This is the core collection that holds all the projects created by users.
 
 ## Subcollections
 
-To keep project-specific data organized and performant, we will use subcollections within each `project` document.
+To keep project-specific data organized and performant, we will use subcollections within each `project` document. Each entry will include a `userId` to track who created it.
 
 ### 1. `codeSnippets` (for Code Vault)
 
 - **Path**: `projects/{projectId}/codeSnippets/{snippetId}`
 - **Fields**:
+    - `userId`: string (The `uid` of the user who created the snippet)
     - `title`: string
     - `description`: string
     - `code`: string
@@ -53,6 +54,7 @@ To keep project-specific data organized and performant, we will use subcollectio
 
 - **Path**: `projects/{projectId}/learningLog/{logId}`
 - **Fields**:
+    - `userId`: string (The `uid` of the user who created the log)
     - `title`: string
     - `content`: string (Markdown content)
     - `tags`: array of strings
@@ -62,6 +64,7 @@ To keep project-specific data organized and performant, we will use subcollectio
 
 - **Path**: `projects/{projectId}/bookmarks/{bookmarkId}`
 - **Fields**:
+    - `userId`: string (The `uid` of the user who created the bookmark)
     - `title`: string
     - `url`: string
     - `description`: string
@@ -72,8 +75,29 @@ To keep project-specific data organized and performant, we will use subcollectio
 
 - **Path**: `projects/{projectId}/files/{fileId}`
 - **Fields**:
+    - `userId`: string (The `uid` of the user who uploaded the file)
     - `fileName`: string
     - `storagePath`: string (Path to the file in Firebase Storage)
     - `fileType`: string (e.g., "image/png", "application/pdf")
     - `fileSize`: number (in bytes)
     - `uploadedAt`: timestamp
+
+### 5. `roadmap` (for Roadmap)
+
+- **Path**: `projects/{projectId}/roadmap/{taskId}`
+- **Fields**:
+    - `userId`: string (The `uid` of the user who created the task)
+    - `task`: string (e.g., "Implement user authentication")
+    - `status`: string (e.g., "todo", "in-progress", "done")
+    - `dueDate`: timestamp (optional)
+    - `createdAt`: timestamp
+
+### 6. `versions` (for Version History)
+
+- **Path**: `projects/{projectId}/versions/{versionId}`
+- **Fields**:
+    - `userId`: string (The `uid` of the user who logged the version)
+    - `version`: string (e.g., "v1.0.2")
+    - `title`: string (e.g., "Initial Release")
+    - `description`: string (Markdown notes for the release)
+    - `releasedAt`: timestamp
