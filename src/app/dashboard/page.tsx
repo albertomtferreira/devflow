@@ -20,23 +20,13 @@ import {
 } from '@/components/ui/table';
 import { useAuth } from '@/hooks/use-auth';
 import { mockProjects } from '@/lib/mock-data';
-import { ProjectStatus } from '@/lib/types';
+import { projectStatusConfig } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { PlusCircle, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-const statusClasses: Record<ProjectStatus, string> = {
-    online: 'bg-green-500',
-    offline: 'bg-gray-500',
-    'in-progress': 'bg-yellow-500',
-};
 
-const statusText: Record<ProjectStatus, string> = {
-    online: 'Online',
-    offline: 'Offline',
-    'in-progress': 'In Progress',
-};
 
 export default function DashboardPage() {
   const { user, loading } = useAuth();
@@ -89,8 +79,8 @@ export default function DashboardPage() {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                         <span className={cn("h-2 w-2 rounded-full", statusClasses[project.status])} />
-                         <span>{statusText[project.status]}</span>
+                         <span className={cn("h-2 w-2 rounded-full", projectStatusConfig[project.status].className)} />
+                         <span>{projectStatusConfig[project.status].text}</span>
                     </div>
                   </TableCell>
                   <TableCell>

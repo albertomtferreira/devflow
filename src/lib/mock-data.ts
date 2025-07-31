@@ -35,7 +35,7 @@ export const mockProjects: Project[] = [
     id: "4",
     title: "Markdown Blog",
     description: "A static-generated blog created with Astro.",
-    status: "online",
+    status: "crashed",
     role: "Owner",
   },
 ];

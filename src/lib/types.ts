@@ -18,7 +18,28 @@ export interface NavLinks {
 
 
 // Project-specific
-export type ProjectStatus = "online" | "offline" | "in-progress";
+export type ProjectStatus = "online" | "offline" | "in-progress" | "crashed";
+
+export const projectStatusConfig = {
+  online: {
+    text: 'Online',
+    className: 'bg-green-500'
+  },
+  offline: {
+    text: 'Offline',
+    className: 'bg-gray-500'
+  },
+  'in-progress': {
+    text: 'In Progress',
+    className: 'bg-yellow-500'
+  },
+  'crashed': {
+    text: 'Crashed',
+    className: 'bg-red-500'
+  }
+} as const satisfies Record<ProjectStatus, { text: string; className: string }>;
+
+
 
 export interface Project {
   id: string;
@@ -30,6 +51,7 @@ export interface Project {
   skills?: string[];
   liveUrl?: string;
   repoUrl?: string;
+  tags?: string[];
 }
 
 // Code Vault

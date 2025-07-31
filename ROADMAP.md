@@ -17,5 +17,5 @@
 ## File structure reorganising
 - [x] **navLinks:** Have all navLinks moved to one folder inside /lib/
 src/components/navigation/project-nav.tsx
-- [ ] **Interfaces/Types:** Centralize all Interface and Type statements into one document
+- [x] **Interfaces/Types:** Centralize all Interface and Type statements into one document
 
