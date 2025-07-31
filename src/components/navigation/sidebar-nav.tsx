@@ -1,6 +1,7 @@
-"use client"
+// src/components/navigation/sidebar-nav.tsx
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   Bell,
   BookOpen,
@@ -15,8 +16,8 @@ import {
   Settings,
   Sparkles,
   Sun,
-  User
-} from "lucide-react"
+  User,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -28,10 +29,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarProvider,
   SidebarSeparator,
-  SidebarTrigger,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,19 +41,19 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import UserAvatar from "./userAvatar"
-import { useAuth } from "@/hooks/use-auth"
-import Link from "next/link"
-import { useTheme } from "../theme-provider"
-import { usePathname } from "next/navigation"
+} from "@/components/ui/dropdown-menu";
+import UserAvatar from "./userAvatar";
+import { useAuth } from "@/hooks/use-auth";
+import Link from "next/link";
+import { useTheme } from "../theme-provider";
+import { usePathname } from "next/navigation";
 
 interface NavItem {
-  id: string
-  title: string
-  icon: React.ComponentType<{ className?: string }>
-  href?: string
-  items?: NavItem[]
+  id: string;
+  title: string;
+  icon: React.ComponentType<{ className?: string }>;
+  href?: string;
+  items?: NavItem[];
 }
 
 const platformNavItems: NavItem[] = [
@@ -64,7 +63,7 @@ const platformNavItems: NavItem[] = [
     icon: LayoutGrid,
     href: "/dashboard",
   },
-]
+];
 
 const projectNavItems: NavItem[] = [
   {
@@ -85,19 +84,17 @@ const projectNavItems: NavItem[] = [
     icon: BookOpen,
     href: "/dashboard/projects/3",
   },
-]
+];
 
-interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> { }
+interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {}
 
 export function AppSidebar({ ...props }: AppSidebarProps) {
-  const { logout } = useAuth()
-  const { setTheme } = useTheme()
-  const pathname = usePathname()
+  const { logout } = useAuth();
+  const { setTheme } = useTheme();
+  const pathname = usePathname();
 
   return (
-    <Sidebar variant="inset"
-      className="h-screen fixed top-0 left-0 z-40 border-r bg-background"
-      {...props}>
+    <Sidebar variant="inset" className="border-r " {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -119,7 +116,11 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
             <SidebarMenu>
               {platformNavItems.map((platform) => (
                 <SidebarMenuItem key={platform.id}>
-                  <SidebarMenuButton tooltip={platform.title} isActive={pathname === '/dashboard'} asChild>
+                  <SidebarMenuButton
+                    tooltip={platform.title}
+                    isActive={pathname === platform.href}
+                    asChild
+                  >
                     <Link href={platform.href!}>
                       <platform.icon className="size-4" />
                       <span>{platform.title}</span>
@@ -142,7 +143,8 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
                       `/dashboard/projects/${project.id}`
                     )}
                     tooltip={project.title}
-                    asChild>
+                    asChild
+                  >
                     <Link href={`/dashboard/projects/${project.id}`}>
                       <project.icon className="size-4" />
                       <span>{project.title}</span>
@@ -230,112 +232,5 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
-  )
-}
-
-// Layout component to wrap your app
-export function SidebarLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
-
-  // Function to generate breadcrumbs from pathname
-  const generateBreadcrumbs = (path: string) => {
-    const segments = path.split('/').filter(Boolean)
-    const breadcrumbs = []
-
-    // Handle root dashboard
-    if (segments.length === 0 || (segments.length === 1 && segments[0] === 'dashboard')) {
-      return 'Dashboard'
-    }
-
-    // Build breadcrumbs
-    let currentPath = ''
-    for (let i = 0; i < segments.length; i++) {
-      currentPath += `/${segments[i]}`
-
-      // Skip the first 'dashboard' segment for cleaner breadcrumbs
-      if (segments[i] === 'dashboard' && i === 0) {
-        continue
-      }
-
-      let displayName = segments[i]
-
-      // Custom display names for specific routes
-      switch (segments[i]) {
-        case 'projects':
-          displayName = 'Projects'
-          break
-        case 'settings':
-          displayName = 'Settings'
-          break
-        case '1':
-          displayName = 'My Awesome App'
-          break
-        case '2':
-          displayName = 'Data Visualizer'
-          break
-        case '3':
-          displayName = 'Learning Go'
-          break
-        default:
-          // Capitalize first letter and replace hyphens/underscores with spaces
-          displayName = segments[i]
-            .replace(/[-_]/g, ' ')
-            .replace(/\b\w/g, l => l.toUpperCase())
-      }
-
-      breadcrumbs.push({
-        name: displayName,
-        path: currentPath,
-        isLast: i === segments.length - 1
-      })
-    }
-
-    return breadcrumbs
-  }
-
-  const breadcrumbs = generateBreadcrumbs(pathname)
-
-  return (
-    <div className="flex min-h-screen">
-
-      <SidebarProvider>
-        <AppSidebar />
-        <div className="w-[260px]" /> {/* match sidebar width */}
-        <main className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          {/* Sticky breadcrumbs header */}
-          <div className="sticky top-0 z-10 flex items-center gap-2 px-4 py-2 bg-background/95 border-b">
-            <SidebarTrigger className="-ml-1" />
-            <div className="text-sm text-muted-foreground">
-              {typeof breadcrumbs === 'string' ? (
-                breadcrumbs
-              ) : (
-                <div className="flex items-center gap-1">
-                  <Link href="/dashboard" className="hover:text-foreground transition-colors">
-                    Dashboard
-                  </Link>
-                  {breadcrumbs.map((crumb, index) => (
-                    <React.Fragment key={crumb.path}>
-                      <span className="mx-1">&gt;</span>
-                      {crumb.isLast ? (
-                        <span className="text-foreground font-medium">{crumb.name}</span>
-                      ) : (
-                        <Link
-                          href={crumb.path}
-                          className="hover:text-foreground transition-colors"
-                        >
-                          {crumb.name}
-                        </Link>
-                      )}
-                    </React.Fragment>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-          {children}
-        </main>
-      </SidebarProvider>
-    </div>
-
-  )
+  );
 }
