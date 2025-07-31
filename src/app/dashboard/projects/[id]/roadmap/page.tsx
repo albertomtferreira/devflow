@@ -41,7 +41,7 @@ export default async function RoadmapPage({
         <Textarea 
           readOnly 
           defaultValue={roadmapContent}
-          className="flex-1 w-full font-code text-sm bg-muted/40"
+          className="flex-1 w-full font-code text-sm bg-muted/40 min-h-[400px]"
         />
       </CardContent>
     </Card>
