@@ -32,6 +32,7 @@ import {
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { useEffect, useState } from "react";
+import { AddProjectDialog } from "@/components/projects/add-project-dialog";
 
 async function getProjects(userId: string): Promise<Project[]> {
   const projectsCol = collection(db, "projects");
@@ -54,6 +55,7 @@ export default function DashboardPage() {
   const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -72,6 +74,20 @@ export default function DashboardPage() {
     }
   }, [user, authLoading, router]);
 
+  const handleProjectCreated = () => {
+    // Re-fetch projects after a new one is created
+    if (user) {
+      setLoading(true);
+      getProjects(user.uid)
+        .then((userProjects) => {
+          setProjects(userProjects);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  };
+
   if (authLoading || loading) {
     return (
       <div className="flex items-center justify-center h-full">
@@ -82,9 +98,14 @@ export default function DashboardPage() {
 
   return (
     <div>
+       <AddProjectDialog 
+        isOpen={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        onProjectCreated={handleProjectCreated}
+      />
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
-        <Button>
+        <Button onClick={() => setIsDialogOpen(true)}>
           <PlusCircle className="mr-2 h-4 w-4" /> New Project
         </Button>
       </div>
@@ -102,7 +123,7 @@ export default function DashboardPage() {
               <p className="text-muted-foreground mb-4">
                 Click "New Project" to get started.
               </p>
-              <Button>
+              <Button onClick={() => setIsDialogOpen(true)}>
                 <PlusCircle className="mr-2 h-4 w-4" /> New Project
               </Button>
             </div>
