@@ -1,9 +1,4 @@
-export interface NavLinks{
-    name: string;
-    href: string;
-    disabled?: boolean;
-}
-
+import { NavLinks } from "./types";
 
 export const projectsNavLinks: NavLinks[] = [
     { name: "Overview", href: "/overview" },

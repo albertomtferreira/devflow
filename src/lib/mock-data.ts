@@ -1,38 +1,7 @@
 // src/lib/mock-data.ts
 
 import { BookOpen, PieChart, Rocket } from "lucide-react";
-
-// Types
-export type ProjectStatus = "online" | "offline" | "in-progress";
-
-export interface Project {
-  id: string;
-  title: string;
-  description: string;
-  status: ProjectStatus;
-  role: string;
-  techStack?: string[];
-  skills?: string[];
-  liveUrl?: string;
-  repoUrl?: string;
-}
-
-export interface Snippet {
-  id: string;
-  title: string;
-  description: string;
-  code: string;
-  language: string;
-  tags: string[];
-}
-
-export interface NavItem {
-    id: string;
-    title: string;
-    icon: React.ComponentType<{ className?: string }>;
-    href?: string;
-    items?: NavItem[];
-}
+import { Project, Snippet, NavItem } from "./types";
 
 
 // Mock Data

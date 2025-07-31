@@ -12,15 +12,8 @@ import { Button } from '@/components/ui/button';
 import { Copy } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
+import { Snippet } from '@/lib/types';
 
-type Snippet = {
-  id: string;
-  title: string;
-  description: string;
-  code: string;
-  language: string;
-  tags: string[];
-};
 
 export function CodeSnippetCard({ snippet }: { snippet: Snippet }) {
   const { toast } = useToast();

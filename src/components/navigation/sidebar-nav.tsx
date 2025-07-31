@@ -44,7 +44,8 @@ import { useAuth } from "@/hooks/use-auth";
 import Link from "next/link";
 import { useTheme } from "../theme-provider";
 import { usePathname } from "next/navigation";
-import { NavItem, projectNavItems } from "@/lib/mock-data";
+import { projectNavItems } from "@/lib/mock-data";
+import { NavItem } from "@/lib/types";
 
 const platformNavItems: NavItem[] = [
   {

@@ -19,7 +19,8 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useAuth } from '@/hooks/use-auth';
-import { mockProjects, ProjectStatus } from '@/lib/mock-data';
+import { mockProjects } from '@/lib/mock-data';
+import { ProjectStatus } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { PlusCircle, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
