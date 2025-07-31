@@ -3,7 +3,6 @@
 
 import { collection, addDoc, serverTimestamp, getDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
-import { revalidatePath } from 'next/cache';
 import { Project } from '../types';
 
 interface NewProjectData {
@@ -12,10 +11,10 @@ interface NewProjectData {
   userId: string;
 }
 
-export async function addProject(data: NewProjectData) {
+export async function addProject(data: NewProjectData): Promise<string> {
   try {
     const projectsCol = collection(db, 'projects');
-    await addDoc(projectsCol, {
+    const docRef = await addDoc(projectsCol, {
       ...data,
       status: 'in-progress', // Default status
       role: 'Owner',         // Default role
@@ -26,9 +25,7 @@ export async function addProject(data: NewProjectData) {
       createdAt: serverTimestamp(),
     });
     
-    // This function is being called from a client component, 
-    // so we cannot use revalidatePath here.
-    // The client will be responsible for refetching the data.
+    return docRef.id;
 
   } catch (error) {
     console.error("Error adding project to Firestore:", error);

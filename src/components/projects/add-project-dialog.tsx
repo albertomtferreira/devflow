@@ -51,6 +51,7 @@ export function AddProjectDialog({ isOpen, onOpenChange, onProjectCreated }: Add
   const { user } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -72,7 +73,7 @@ export function AddProjectDialog({ isOpen, onOpenChange, onProjectCreated }: Add
 
     setLoading(true);
     try {
-      await addProject({
+      const newProjectId = await addProject({
         title: values.title,
         description: values.description,
         userId: user.uid,
@@ -85,7 +86,8 @@ export function AddProjectDialog({ isOpen, onOpenChange, onProjectCreated }: Add
       
       form.reset();
       onOpenChange(false);
-      onProjectCreated(); // Callback to refresh the project list
+      onProjectCreated(); // Callback to refresh the project list on the dashboard
+      router.push(`/dashboard/projects/${newProjectId}`);
 
     } catch (error) {
       console.error("Error creating project:", error);
