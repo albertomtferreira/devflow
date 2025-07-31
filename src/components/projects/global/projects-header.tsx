@@ -19,7 +19,7 @@ export default function ProjectsHeader() {
     // Only fetch if auth is complete and we have a user and an id.
     if (!authLoading && user && id) {
       setLoading(true);
-      getProject(id)
+      getProject(id, user.uid)
         .then(setProject)
         .finally(() => setLoading(false));
     } else if (!authLoading && !user) {

@@ -93,7 +93,7 @@ export function AddProjectDialog({ isOpen, onOpenChange, onProjectCreated }: Add
       console.error("Error creating project:", error);
       toast({
         variant: "destructive",
-        title: "Uh oh! Something went wrong.",
+        title: "Uh oh! Something went wrong....",
         description: "Could not create the project. Please try again.",
       });
     } finally {

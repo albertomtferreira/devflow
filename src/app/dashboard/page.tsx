@@ -23,32 +23,9 @@ import { cn } from "@/lib/utils";
 import { PlusCircle, ArrowUpRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  collection,
-  query,
-  where,
-  getDocs,
-  Timestamp,
-} from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { useEffect, useState } from "react";
 import { AddProjectDialog } from "@/components/projects/add-project-dialog";
-
-async function getProjects(userId: string): Promise<Project[]> {
-  const projectsCol = collection(db, "projects");
-  const q = query(projectsCol, where("userId", "==", userId));
-  const querySnapshot = await getDocs(q);
-  const projects = querySnapshot.docs.map((doc) => {
-    const data = doc.data();
-    return {
-      id: doc.id,
-      ...data,
-      // Firestore Timestamps need to be converted to be serializable
-      createdAt: (data.createdAt as Timestamp)?.toDate().toISOString(),
-    } as Project;
-  });
-  return projects;
-}
+import { getUserProjects } from "@/lib/actions/projects";
 
 export default function DashboardPage() {
   const { user, loading: authLoading } = useAuth();
@@ -59,7 +36,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (user) {
-      getProjects(user.uid)
+      getUserProjects(user.uid)
         .then((userProjects) => {
           setProjects(userProjects);
           setLoading(false);
@@ -78,7 +55,7 @@ export default function DashboardPage() {
     // Re-fetch projects after a new one is created
     if (user) {
       setLoading(true);
-      getProjects(user.uid)
+      getUserProjects(user.uid)
         .then((userProjects) => {
           setProjects(userProjects);
         })

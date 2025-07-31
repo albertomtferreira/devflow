@@ -46,9 +46,9 @@ import Link from "next/link";
 import { useTheme } from "../theme-provider";
 import { usePathname } from "next/navigation";
 import { Project } from "@/lib/types";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { SidebarMenuSkeleton } from "../ui/sidebar";
+import { getUserProjects } from "@/lib/actions/projects";
+import { useEffect, useState } from 'react';
 
 const platformNavItems = [
   {
@@ -65,29 +65,28 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
   const { user, logout } = useAuth();
   const { setTheme } = useTheme();
   const pathname = usePathname();
-  const [projects, setProjects] = React.useState<Project[]>([]);
-  const [loading, setLoading] = React.useState(true);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (user) {
-      setLoading(true);
-      const projectsQuery = query(collection(db, "projects"), where("userId", "==", user.uid));
-      
-      const unsubscribe = onSnapshot(projectsQuery, (snapshot) => {
-        const userProjects = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        } as Project));
-        setProjects(userProjects);
-        setLoading(false);
-      }, (error) => {
-        console.error("Error fetching projects in real-time:", error);
-        setLoading(false);
-      });
-
-      return () => unsubscribe();
+      loadProjects();
     }
   }, [user]);
+
+  const loadProjects = async () => {
+    if (!user) return;
+    
+    try {
+      setLoading(true);
+      const userProjects = await getUserProjects(user.uid);
+      setProjects(userProjects);
+    } catch (error) {
+      console.error('Failed to load projects:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Sidebar variant="inset" className="border-r " {...props}>
