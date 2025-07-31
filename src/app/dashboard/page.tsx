@@ -69,38 +69,40 @@ export default function DashboardPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {mockProjects.map((project) => (
-                <TableRow key={project.id}>
-                  <TableCell>
-                    <div className="font-medium">{project.title}</div>
-                    <div className="text-sm text-muted-foreground line-clamp-1">
-                      {project.description}
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={cn(
-                          "h-2 w-2 rounded-full",
-                          projectStatusConfig[project.status].className
-                        )}
-                      />
-                      <span>{projectStatusConfig[project.status].text}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{project.role}</Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Button variant="ghost" size="icon" asChild>
-                      <Link href={`/dashboard/projects/${project.id}`}>
-                        <ArrowUpRight className="h-4 w-4" />
-                        <span className="sr-only">View Project</span>
-                      </Link>
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {mockProjects.map((project) => {
+                return (
+                  <TableRow key={project.id}>
+                    <TableCell>
+                      <div className="font-medium">{project.title}</div>
+                      <div className="text-sm text-muted-foreground line-clamp-1">
+                        {project.description}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={cn(
+                            "h-2 w-2 rounded-full",
+                            projectStatusConfig[project.status].className
+                          )}
+                        />
+                        <span>{projectStatusConfig[project.status].text}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline">{project.role}</Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button variant="ghost" size="icon" asChild>
+                        <Link href={`/dashboard/projects/${project.id}`}>
+                          <ArrowUpRight className="h-4 w-4" />
+                          <span className="sr-only">View Project</span>
+                        </Link>
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </CardContent>
