@@ -2,14 +2,8 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-
     function isSignedIn() {
       return request.auth != null;
-    }
-
-    // Debug function to expose values in error messages
-    function debug(value) {
-      return value;
     }
 
     match /users/{userId} {
@@ -17,19 +11,14 @@ service cloud.firestore {
     }
 
     match /projects/{projectId} {
-      // Temporarily open get for simplicity while we debug list
-      allow get: if isSignedIn();
+      // Allow reading/writing a single document if the user is the owner
+      allow get, update, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
 
-      // Only change this line for debugging
-      allow list: if debug(request.query.where) == debug(request.auth);
+      // Allow creating a document if the user is setting themselves as the owner
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
 
-      allow create: if isSignedIn() && request.auth.uid == request.resource.data.userId;
-      allow update, delete: if isSignedIn() && request.auth.uid == resource.data.userId;
-      
-      // Allow reads and writes on all subcollections for now
-      match /{document=**} {
-        allow read, write: if isSignedIn();
-      }
+      // Allow querying the collection only if the query is filtered by the user's own ID
+      allow list: if isSignedIn() && request.query.where.userId == request.auth.uid;
     }
   }
 }
