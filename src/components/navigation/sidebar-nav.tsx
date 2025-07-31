@@ -46,7 +46,7 @@ import Link from "next/link";
 import { useTheme } from "../theme-provider";
 import { usePathname } from "next/navigation";
 import { Project } from "@/lib/types";
-import { collection, query, where, getDocs, onSnapshot } from "firebase/firestore";
+import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { SidebarMenuSkeleton } from "../ui/sidebar";
 
@@ -58,19 +58,6 @@ const platformNavItems = [
     href: "/dashboard",
   },
 ];
-
-async function getProjects(userId: string): Promise<Project[]> {
-  const projectsCol = collection(db, "projects");
-  const q = query(projectsCol, where("userId", "==", userId));
-  const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map(
-    (doc) =>
-      ({
-        id: doc.id,
-        ...doc.data(),
-      } as Project)
-  );
-}
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {}
 

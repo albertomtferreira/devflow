@@ -19,13 +19,16 @@ export async function addProject(data: NewProjectData) {
       ...data,
       status: 'in-progress', // Default status
       role: 'Owner',         // Default role
+      techStack: [],
+      skills: [],
+      liveUrl: '',
+      repoUrl: '',
       createdAt: serverTimestamp(),
     });
     
-    // Revalidate the dashboard page to show the new project
-    revalidatePath('/dashboard');
-    revalidatePath('/dashboard/projects');
-
+    // This function is being called from a client component, 
+    // so we cannot use revalidatePath here.
+    // The client will be responsible for refetching the data.
 
   } catch (error) {
     console.error("Error adding project to Firestore:", error);
