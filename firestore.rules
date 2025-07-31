@@ -1,4 +1,3 @@
-
 rules_version = '2';
 
 service cloud.firestore {
@@ -19,17 +18,17 @@ service cloud.firestore {
     match /projects/{projectId} {
       // Allow reading a single project if the user is the owner.
       allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
-      
+
       // Allow listing projects ONLY if the query is filtered by the user's ID.
       // This is crucial for dashboard queries.
-      allow list: if isSignedIn() && request.query.resource.data.userId == request.auth.uid;
+      allow list: if isSignedIn() && request.query.where.size() == 1 && request.query.where[0].fieldPath == "userId" && request.query.where[0].op == "==" && request.query.where[0].value == request.auth.uid;
 
       // Allow creating a project if the new document's userId matches the user's ID.
       allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
-      
+
       // Allow updates and deletes only by the project owner.
       allow update, delete: if isSignedIn() && resource.data.userId == request.auth.uid;
-      
+
       // Subcollection rules
       match /{collection}/{docId} {
         allow read, write: if isSignedIn() && get(/databases/$(database)/documents/projects/$(projectId)).data.userId == request.auth.uid;
