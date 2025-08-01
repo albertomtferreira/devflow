@@ -1,5 +1,5 @@
 // src/app/dashboard/projects/[id]/overview/page.tsx
-'use client'
+"use client";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -10,11 +10,7 @@ import { Project } from "@/lib/types";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 
-export default function OverviewPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default function OverviewPage({ params }: { params: { id: string } }) {
   const { id } = params;
   const { user, loading: authLoading } = useAuth();
   const [project, setProject] = useState<Project | null>(null);
@@ -32,6 +28,18 @@ export default function OverviewPage({
     }
   }, [id, user, authLoading]);
 
+  // Listen for project updates from other components
+  useEffect(() => {
+    const handleProjectUpdate = (event: Event) => {
+      const customEvent = event as CustomEvent<Project>;
+      setProject(customEvent.detail);
+    };
+
+    window.addEventListener("projectUpdated", handleProjectUpdate);
+    return () =>
+      window.removeEventListener("projectUpdated", handleProjectUpdate);
+  }, []);
+
   if (authLoading || loading) {
     return (
       <div className="flex items-center justify-center h-full pt-16">
@@ -41,7 +49,11 @@ export default function OverviewPage({
   }
 
   if (!project) {
-    return <div className="text-center pt-16">Project not found or you do not have permission to view it.</div>;
+    return (
+      <div className="text-center pt-16">
+        Project not found or you do not have permission to view it.
+      </div>
+    );
   }
 
   return (
@@ -114,9 +126,25 @@ export default function OverviewPage({
                 </div>
               </div>
             )}
-            {(!project.techStack || project.techStack.length === 0) && (!project.skills || project.skills.length === 0) && (
-              <p className="text-sm text-muted-foreground">No tech stack or skills have been added yet.</p>
+            {project.tags && project.tags.length > 0 && (
+              <div>
+                <h3 className="font-semibold mb-2">Tags</h3>
+                <div className="flex flex-wrap gap-2">
+                  {project.tags.map((tag) => (
+                    <Badge key={tag} variant="outline">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
             )}
+            {(!project.techStack || project.techStack.length === 0) &&
+              (!project.skills || project.skills.length === 0) &&
+              (!project.tags || project.tags.length === 0) && (
+                <p className="text-sm text-muted-foreground">
+                  No tech stack, skills, or tags have been added yet.
+                </p>
+              )}
           </CardContent>
         </Card>
       </div>

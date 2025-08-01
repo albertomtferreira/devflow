@@ -16,7 +16,24 @@ export interface NavLinks {
   disabled?: boolean;
 }
 
+//User
+
+export interface NewUser {
+  uid: string;
+  email: string;
+  name: string;
+}
+
 // Project-specific
+
+//New Project
+export interface NewProjectData {
+  title: string;
+  description: string;
+  userId: string;
+}
+
+//Project Status
 export type ProjectStatus = "online" | "offline" | "in-progress" | "crashed";
 
 export const projectStatusConfig = {
@@ -43,6 +60,18 @@ export interface ProjectsDetailsHeaderProps {
   title: string;
   buttonText?: string;
   onAction?: () => void;
+}
+
+export interface NewProjectData {
+  title: string;
+  description: string;
+  userId: string;
+  techStack?: string[];
+  skills?: string[];
+  liveUrl?: string;
+  repoUrl?: string;
+  tags?: string[];
+  status?: ProjectStatus; // Optional for updates
 }
 
 //Overview

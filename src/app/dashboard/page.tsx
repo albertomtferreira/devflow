@@ -24,15 +24,15 @@ import { PlusCircle, ArrowUpRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AddProjectDialog } from "@/components/projects/add-project-dialog";
 import { getUserProjects } from "@/lib/actions/projects";
+import { ProjectSettingsDialog } from "@/components/projects/project-settings-dialog";
 
 export default function DashboardPage() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -75,14 +75,18 @@ export default function DashboardPage() {
 
   return (
     <div>
-       <AddProjectDialog 
-        isOpen={isDialogOpen}
-        onOpenChange={setIsDialogOpen}
-        onProjectCreated={handleProjectCreated}
+      <ProjectSettingsDialog
+        isOpen={isCreateDialogOpen}
+        onOpenChange={setIsCreateDialogOpen}
+        mode="create"
+        onProjectSaved={(project) => {
+          // Refresh project list or navigate to new project
+          console.log("New project created:", project);
+        }}
       />
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold tracking-tight">Projects</h1>
-        <Button onClick={() => setIsDialogOpen(true)}>
+        <Button onClick={() => setIsCreateDialogOpen(true)}>
           <PlusCircle className="mr-2 h-4 w-4" /> New Project
         </Button>
       </div>
@@ -100,7 +104,7 @@ export default function DashboardPage() {
               <p className="text-muted-foreground mb-4">
                 Click "New Project" to get started.
               </p>
-              <Button onClick={() => setIsDialogOpen(true)}>
+              <Button onClick={() => setIsCreateDialogOpen(true)}>
                 <PlusCircle className="mr-2 h-4 w-4" /> New Project
               </Button>
             </div>
@@ -136,7 +140,8 @@ export default function DashboardPage() {
                             )}
                           />
                           <span>
-                            {projectStatusConfig[project.status]?.text ?? "Unknown"}
+                            {projectStatusConfig[project.status]?.text ??
+                              "Unknown"}
                           </span>
                         </div>
                       </TableCell>
