@@ -12,11 +12,15 @@
 
 - [ ] **Implement Full CRUD for Projects:** Add functionality to create, update, and delete projects.
 - [ ] **Flesh out Project Features:** Build the UI and logic for the Learning Log, Bookmarks, and File Uploads.
-  - [ ] **Overview:** Build UI and logic for the Overview page
-    - [ ] **Editable Fields:** Make the fields editable by either a dialog box or transforming the field editable or a mix
-    - [ ] **Add Options Gear Icon:** Add and implement Options gear icon on the top right side of the Project Details Header
+  - [x] **Overview:** Build UI and logic for the Overview page
+    - [x] **Editable Fields:** Make the fields editable by either a dialog box or transforming the field editable or a mix
+    - [x] **Add Options Gear Icon:** Add and implement Options gear icon on the top right side of the Project Details Header
   - [ ] **Roadmap:** Build UI and logic for the Roadmap page
   - [ ] **Code Vault:** Build UI and logic for the Code Vault page
+    - [x] **Add snippet:** Add snippet to DB
+    - [ ] **Load Snippets:** Remove mockup data and load snippets from DB
+    - [ ] **Edit snippet:** Implement UI and db function
+    - [ ] **Delete snippet:** Implement UI and db function
   - [ ] **Learning Log:** Build UI and logic for the Learning Log page
   - [ ] **Bookmarks:** Build UI and logic for the Bookmarks page
   - [ ] **Files:** Build UI and logic for the Files page

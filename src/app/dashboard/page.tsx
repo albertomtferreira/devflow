@@ -127,7 +127,7 @@ export default function DashboardPage() {
                       <TableCell>
                         <div className="font-medium">{project.title}</div>
                         <div className="text-sm text-muted-foreground line-clamp-1">
-                          {project.description}
+                          {project.shortDescription}
                         </div>
                       </TableCell>
                       <TableCell>

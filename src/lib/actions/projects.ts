@@ -92,8 +92,10 @@ export async function updateProject(
     const cleanData: any = {};
 
     if (data.title !== undefined) cleanData.title = data.title;
-    if (data.description !== undefined)
-      cleanData.description = data.description;
+    if (data.shortDescription !== undefined)
+      cleanData.shortDescription = data.shortDescription;
+    if (data.longDescription !== undefined)
+      cleanData.longDescription = data.longDescription;
     if (data.liveUrl !== undefined) cleanData.liveUrl = data.liveUrl;
     if (data.repoUrl !== undefined) cleanData.repoUrl = data.repoUrl;
     if (data.techStack !== undefined)

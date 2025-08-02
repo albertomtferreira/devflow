@@ -26,13 +26,6 @@ export interface NewUser {
 
 // Project-specific
 
-//New Project
-export interface NewProjectData {
-  title: string;
-  description: string;
-  userId: string;
-}
-
 //Project Status
 export type ProjectStatus = "online" | "offline" | "in-progress" | "crashed";
 
@@ -62,9 +55,11 @@ export interface ProjectsDetailsHeaderProps {
   onAction?: () => void;
 }
 
+//New Project
 export interface NewProjectData {
   title: string;
-  description: string;
+  shortDescription: string;
+  longDescription: string;
   userId: string;
   techStack?: string[];
   skills?: string[];
@@ -79,7 +74,8 @@ export interface Project {
   id: string;
   userId: string;
   title: string;
-  description: string;
+  shortDescription: string;
+  longDescription: string;
   status: ProjectStatus;
   role: string;
   techStack?: string[];
@@ -92,10 +88,9 @@ export interface Project {
 
 // Code Vault
 export interface Snippet {
-  id: string;
+  userId: string;
   title: string;
   description: string;
   code: string;
-  language: string;
   tags: string[];
 }

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Card,
@@ -6,14 +6,13 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Copy } from 'lucide-react';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { useToast } from '@/hooks/use-toast';
-import { Snippet } from '@/lib/types';
-
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Copy, Pencil, Trash, Trash2, TrashIcon, X } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useToast } from "@/hooks/use-toast";
+import { Snippet } from "@/lib/types";
 
 export function CodeSnippetCard({ snippet }: { snippet: Snippet }) {
   const { toast } = useToast();
@@ -21,8 +20,8 @@ export function CodeSnippetCard({ snippet }: { snippet: Snippet }) {
   const handleCopy = () => {
     navigator.clipboard.writeText(snippet.code);
     toast({
-      title: 'Copied!',
-      description: 'The code snippet has been copied to your clipboard.',
+      title: "Copied!",
+      description: "The code snippet has been copied to your clipboard.",
     });
   };
 
@@ -30,21 +29,31 @@ export function CodeSnippetCard({ snippet }: { snippet: Snippet }) {
     <Card>
       <CardHeader>
         <div className="flex justify-between items-start">
-            <div>
-                <CardTitle>{snippet.title}</CardTitle>
-                <CardDescription className="mt-1">{snippet.description}</CardDescription>
-            </div>
-             <Button variant="ghost" size="icon" onClick={handleCopy}>
-                <Copy className="h-4 w-4" />
-                <span className="sr-only">Copy code</span>
-            </Button>
+          <div>
+            <CardTitle>{snippet.title}</CardTitle>
+            <CardDescription className="mt-1">
+              {snippet.description}
+            </CardDescription>
+          </div>
+          <Button variant="ghost" size="icon" onClick={handleCopy}>
+            <Copy className="h-4 w-4" />
+            <span className="sr-only">Copy code</span>
+          </Button>
+          <Button variant="ghost" size="icon" onClick={handleCopy}>
+            <Pencil className="h-4 w-4" />
+            <span className="sr-only">Copy code</span>
+          </Button>
+          <Button variant="destructive" size="icon" onClick={handleCopy}>
+            <Trash2 className="h-4 w-4" />
+            <span className="sr-only">Copy code</span>
+          </Button>
         </div>
       </CardHeader>
       <CardContent>
         <ScrollArea className="max-h-80 w-full rounded-md border bg-muted">
-            <pre className="p-4 font-code text-sm">
-                <code>{snippet.code}</code>
-            </pre>
+          <pre className="p-4 font-code text-sm">
+            <code>{snippet.code}</code>
+          </pre>
         </ScrollArea>
         <div className="flex flex-wrap gap-2 mt-4">
           {snippet.tags.map((tag) => (

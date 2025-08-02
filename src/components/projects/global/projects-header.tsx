@@ -78,7 +78,9 @@ export default function ProjectsHeader() {
       <div className="flex justify-between">
         <div className="mb-6 flex-shrink-0">
           <h1 className="text-3xl font-bold tracking-tight">{project.title}</h1>
-          <p className="text-muted-foreground mt-1">{project.description}</p>
+          <p className="text-muted-foreground mt-1">
+            {project.shortDescription}
+          </p>
         </div>
         <div>
           <Button onClick={() => setIsEditDialogOpen(true)}>

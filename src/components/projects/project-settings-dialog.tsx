@@ -43,7 +43,8 @@ export function ProjectSettingsDialog({
 
   // Form state
   const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [shortDescription, setShortDescription] = useState("");
+  const [longDescription, setLongDescription] = useState("");
   const [liveLink, setLiveLink] = useState("");
   const [githubLink, setGithubLink] = useState("");
   const [techStack, setTechStack] = useState<string[]>([]);
@@ -62,7 +63,8 @@ export function ProjectSettingsDialog({
           const project = await getProject(projectId, user.uid);
           if (project) {
             setTitle(project.title || "");
-            setDescription(project.description || "");
+            setShortDescription(project.shortDescription || "");
+            setLongDescription(project.longDescription || "");
             setLiveLink(project.liveUrl || "");
             setGithubLink(project.repoUrl || "");
             setTechStack(project.techStack || []);
@@ -88,7 +90,8 @@ export function ProjectSettingsDialog({
   useEffect(() => {
     if (!isOpen && mode === "create") {
       setTitle("");
-      setDescription("");
+      setShortDescription("");
+      setLongDescription("");
       setLiveLink("");
       setGithubLink("");
       setTechStack([]);
@@ -101,7 +104,7 @@ export function ProjectSettingsDialog({
   }, [isOpen, mode]);
 
   // Validation
-  const isFormValid = title.trim() && description.trim() && user?.uid;
+  const isFormValid = title.trim() && shortDescription.trim() && user?.uid;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -112,7 +115,8 @@ export function ProjectSettingsDialog({
     try {
       const projectData = {
         title: title.trim(),
-        description: description.trim(),
+        shortDescription: shortDescription.trim(),
+        longDescription: longDescription.trim(),
         liveUrl: liveLink.trim(),
         repoUrl: githubLink.trim(),
         techStack,
@@ -238,14 +242,33 @@ export function ProjectSettingsDialog({
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="description" className="text-sm font-medium">
-                    Description *
+                  <Label
+                    htmlFor="shortDescription"
+                    className="text-sm font-medium"
+                  >
+                    Short Description *
                   </Label>
                   <Textarea
-                    id="description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Describe your project"
+                    id="shortDescription"
+                    value={shortDescription}
+                    onChange={(e) => setShortDescription(e.target.value)}
+                    placeholder="Provide short description"
+                    className="w-full min-h-[80px] resize-none"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="longDescription"
+                    className="text-sm font-medium"
+                  >
+                    Long Description
+                  </Label>
+                  <Textarea
+                    id="longDescription"
+                    value={longDescription}
+                    onChange={(e) => setLongDescription(e.target.value)}
+                    placeholder="Provide detailed information of your project"
                     className="w-full min-h-[80px] resize-none"
                     required
                   />

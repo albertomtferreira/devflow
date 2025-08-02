@@ -4,7 +4,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ExternalLink, Github, Loader2 } from "lucide-react";
+import { ExternalLink, Github, Loader2, X } from "lucide-react";
 import { getProject } from "@/lib/actions/projects";
 import { Project } from "@/lib/types";
 import { useEffect, useState } from "react";
@@ -64,12 +64,19 @@ export default function OverviewPage({ params }: { params: { id: string } }) {
             <CardTitle>Project Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p>
-              This is where you would have a detailed project description,
-              possibly editable with a markdown editor. For now, it's showing
-              the project's main description:
-            </p>
-            <p className="text-muted-foreground">{project.description}</p>
+            {project.longDescription && (
+              <p className="text-muted-foreground">{project.longDescription}</p>
+            )}
+            {!project.longDescription && (
+              <>
+                <p className="text-muted-foreground">
+                  The project does not have a long description.
+                </p>{" "}
+                <p className="text-muted-foreground">
+                  Head to settings and update your project.
+                </p>
+              </>
+            )}
           </CardContent>
         </Card>
       </div>
@@ -80,22 +87,42 @@ export default function OverviewPage({ params }: { params: { id: string } }) {
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             <Button variant="outline" asChild>
-              <a
-                href={project.liveUrl ?? "#"}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <ExternalLink className="mr-2 h-4 w-4" /> Live App
-              </a>
+              {project.liveUrl && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <ExternalLink className="mr-2 h-4 w-4" /> Live App
+                </a>
+              )}
             </Button>
             <Button variant="outline" asChild>
-              <a
-                href={project.repoUrl ?? "#"}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Github className="mr-2 h-4 w-4" /> GitHub Repo
-              </a>
+              {!project.liveUrl && (
+                <p>
+                  <X />
+                  No Link for live project{" "}
+                  <ExternalLink className="mr-2 h-4 w-4" />
+                </p>
+              )}
+            </Button>
+            <Button variant="outline" asChild>
+              {project.repoUrl && (
+                <a
+                  href={project.repoUrl ?? "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Github className="mr-2 h-4 w-4" /> GitHub Repo
+                </a>
+              )}
+            </Button>
+            <Button variant="outline" asChild>
+              {!project.repoUrl && (
+                <p>
+                  <X /> No Link for repo <Github className="mr-2 h-4 w-4" />
+                </p>
+              )}
             </Button>
           </CardContent>
         </Card>
