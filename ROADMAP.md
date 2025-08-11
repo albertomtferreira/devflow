@@ -11,6 +11,7 @@
 ## 🚀 v0.2.0: Next Steps & Enhancements
 
 - [ ] **Implement Full CRUD for Projects:** Add functionality to create, update, and delete projects.
+- [ ] **Status:** Add project status on Project Header Overview and add dropdown box to change status.
 - [ ] **Flesh out Project Features:** Build the UI and logic for the Learning Log, Bookmarks, and File Uploads.
   - [x] **Overview:** Build UI and logic for the Overview page
     - [x] **Editable Fields:** Make the fields editable by either a dialog box or transforming the field editable or a mix
@@ -18,9 +19,9 @@
   - [ ] **Roadmap:** Build UI and logic for the Roadmap page
   - [ ] **Code Vault:** Build UI and logic for the Code Vault page
     - [x] **Add snippet:** Add snippet to DB
-    - [ ] **Load Snippets:** Remove mockup data and load snippets from DB
-    - [ ] **Edit snippet:** Implement UI and db function
-    - [ ] **Delete snippet:** Implement UI and db function
+    - [x] **Load Snippets:** Remove mockup data and load snippets from DB
+    - [x] **Edit snippet:** Implement UI and db function
+    - [x] **Delete snippet:** Implement UI and db function
   - [ ] **Learning Log:** Build UI and logic for the Learning Log page
   - [ ] **Bookmarks:** Build UI and logic for the Bookmarks page
   - [ ] **Files:** Build UI and logic for the Files page
@@ -40,3 +41,6 @@
 
 - [x] **Traffic lights System:** The status of the projects on the Dashboards is not showing the color of the status
 - [x] **Plus Circle New Project:** The + circle on the dashboard "New Project" button is not showing
+- [ ] **Breadcrumbs:**
+  - [ ] **It's showing the project ID:** Remove project ID from breadcrumbs and replace by the project name
+  - [ ] **Dashboard:** When on Dashboard it's showing Dashboard twice
