@@ -331,4 +331,8 @@
   .content-spacing {
     @apply space-y-6;
   }
+
+  .tooltip-destructive {
+    @apply bg-red-500 font-semibold text-white;
+  }
 }

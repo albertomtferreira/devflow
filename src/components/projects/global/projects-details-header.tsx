@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { CardTitle } from "@/components/ui/card";
-import { AddSnippetDialog } from "../code-vault/add-snippet-dialog";
+
 import { useState } from "react";
 import {
   PlusCircle,
@@ -13,12 +13,18 @@ import {
   Save,
 } from "lucide-react";
 import { ProjectsDetailsHeaderProps } from "@/lib/types";
+import { Snippet } from "@/lib/types";
+import { SnippetDialog } from "../code-vault/add-snippet-dialog";
 
 export default function ProjectsDetailsHeader({
   title,
   buttonText,
   onAction,
-}: ProjectsDetailsHeaderProps) {
+  projectId,
+  onSnippetAdded, // New prop for snippet callback
+}: ProjectsDetailsHeaderProps & {
+  onSnippetAdded?: (snippet: Snippet & { id: string }) => void;
+}) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const configButtonText = buttonText || "Action";
 
@@ -101,6 +107,13 @@ export default function ProjectsDetailsHeader({
     return buttonText || config?.buttonText || "Action";
   };
 
+  const handleSnippetSaved = (snippet: Snippet & { id: string }) => {
+    // Close the dialog
+    setIsDialogOpen(false);
+    // Notify parent component
+    onSnippetAdded?.(snippet);
+  };
+
   const ButtonIcon = config?.icon;
 
   return (
@@ -114,10 +127,13 @@ export default function ProjectsDetailsHeader({
       </div>
 
       {/* Render dialog only for Code Vault */}
-      {config?.hasDialog && (
-        <AddSnippetDialog
+      {config?.hasDialog && title === "Code Vault" && (
+        <SnippetDialog
+          projectId={projectId!}
           isOpen={isDialogOpen}
           onOpenChange={setIsDialogOpen}
+          mode="add"
+          onSnippetSaved={handleSnippetSaved}
         />
       )}
     </>

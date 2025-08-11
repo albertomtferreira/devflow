@@ -50,9 +50,11 @@ export const projectStatusConfig = {
 
 //Project Details Header
 export interface ProjectsDetailsHeaderProps {
+  projectId?: string;
   title: string;
   buttonText?: string;
   onAction?: () => void;
+  onSnippetAdded?: (snippet: Snippet & { id: string }) => void; // New optional prop
 }
 
 //New Project
@@ -88,6 +90,7 @@ export interface Project {
 
 // Code Vault
 export interface Snippet {
+  id: string;
   userId: string;
   title: string;
   description: string;

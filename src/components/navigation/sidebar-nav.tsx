@@ -48,7 +48,7 @@ import { usePathname } from "next/navigation";
 import { Project } from "@/lib/types";
 import { SidebarMenuSkeleton } from "../ui/sidebar";
 import { getUserProjects } from "@/lib/actions/projects";
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 const platformNavItems = [
   {
@@ -67,6 +67,7 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
   const pathname = usePathname();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [project, setProject] = useState<Project | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -76,13 +77,13 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
 
   const loadProjects = async () => {
     if (!user) return;
-    
+
     try {
       setLoading(true);
       const userProjects = await getUserProjects(user.uid);
       setProjects(userProjects);
     } catch (error) {
-      console.error('Failed to load projects:', error);
+      console.error("Failed to load projects:", error);
     } finally {
       setLoading(false);
     }
@@ -133,8 +134,8 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
             <SidebarMenu>
               {loading ? (
                 <>
-                  <SidebarMenuSkeleton showIcon/>
-                  <SidebarMenuSkeleton showIcon/>
+                  <SidebarMenuSkeleton showIcon />
+                  <SidebarMenuSkeleton showIcon />
                 </>
               ) : (
                 projects.map((project) => (
