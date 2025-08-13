@@ -3,49 +3,43 @@
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { mockProjects } from "@/lib/mock-data";
 
+// Consider something an "ID-like token" if:
+// - All alphanumeric (optionally with dashes/underscores)
+// - AND length is >= 15 (to catch long random IDs)
+// - AND not purely alphabetic words
+const isIdLike = (seg: string) => {
+  if (!/[a-zA-Z]/.test(seg)) return true; // only digits → numeric ID
+  if (/^[a-f0-9-]{8,}$/i.test(seg)) return true; // UUID/hex
+  if (/^[A-Za-z0-9_-]{15,}$/.test(seg)) return true; // Firestore-style random IDs
+  return false;
+};
 
-// Function to generate breadcrumbs from pathname
+const toTitle = (seg: string) =>
+  seg.replace(/[-_]/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+
 export const generateBreadcrumbs = (path: string) => {
   const segments = path.split("/").filter(Boolean);
-  const breadcrumbs = [];
+  const breadcrumbs: { name: string; path: string; isLast: boolean }[] = [];
 
-  // Handle root dashboard
-  if (
-    segments.length === 0 ||
-    (segments.length === 1 && segments[0] === "dashboard")
-  ) {
-    return [{ name: "Dashboard", path: "/dashboard", isLast: true }];
-  }
-
-  // Build breadcrumbs
   let currentPath = "";
+
   for (let i = 0; i < segments.length; i++) {
-    currentPath += `/${segments[i]}`;
+    const seg = segments[i];
+    currentPath += `/${seg}`;
 
-    // Skip the first 'dashboard' segment for cleaner breadcrumbs
-    if (segments[i] === "dashboard" && i === 0) {
-      continue;
-    }
+    // Skip leading 'dashboard' for cleaner breadcrumbs
+    if (i === 0 && seg === "dashboard") continue;
 
-    let displayName = segments[i];
+    // If not a "word" (e.g., numeric or uuid-ish project ID), don't render it
+    if (isIdLike(segments[i])) continue;
+
     const isLast = i === segments.length - 1;
 
-    if (segments[i-1] === "projects" && !isNaN(Number(segments[i]))) {
-        const project = mockProjects.find(p => p.id === segments[i]);
-        displayName = project?.title || "Project";
-    } else {
-        // Capitalize first letter and replace hyphens/underscores with spaces
-        displayName = segments[i]
-          .replace(/[-_]/g, " ")
-          .replace(/\b\w/g, (l) => l.toUpperCase());
-    }
-    
     breadcrumbs.push({
-      name: displayName,
+      name: toTitle(seg),
       path: currentPath,
-      isLast: isLast,
+      isLast,
     });
   }
 
@@ -65,7 +59,6 @@ export function Breadcrumb({
   items: BreadcrumbItem[] | string;
   className?: string;
 }) {
-  // Handle the case where items is a string (like "Dashboard")
   if (typeof items === "string") {
     return (
       <nav aria-label="Breadcrumb" className={cn("text-sm", className)}>

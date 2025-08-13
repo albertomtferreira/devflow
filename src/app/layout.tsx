@@ -1,12 +1,14 @@
-import type { Metadata } from 'next';
-import './globals.css';
-import { ThemeProvider } from '@/components/theme-provider';
-import { Toaster } from '@/components/ui/toaster';
-import { AuthProvider } from '@/hooks/use-auth';
+// src/app/layout.tsx
+import type { Metadata } from "next";
+import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
+import { AuthProvider } from "@/hooks/use-auth";
+import { ProjectsProvider } from "@/contexts/projects-context";
 
 export const metadata: Metadata = {
-  title: 'DevFlow',
-  description: 'Organize your development life.',
+  title: "DevFlow",
+  description: "Organize your development life.",
 };
 
 export default function RootLayout({
@@ -31,8 +33,10 @@ export default function RootLayout({
       <body className="font-body antialiased">
         <ThemeProvider>
           <AuthProvider>
-            {children}
-            <Toaster />
+            <ProjectsProvider>
+              {children}
+              <Toaster />
+            </ProjectsProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>
