@@ -1,4 +1,4 @@
-//src/app/dashboard/page.tsx
+// src/app/dashboard/page.tsx
 "use client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,57 +18,61 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useAuth } from "@/hooks/use-auth";
-import { Project, projectStatusConfig } from "@/lib/types";
+import { projectStatusConfig } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { PlusCircle, ArrowUpRight, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getUserProjects } from "@/lib/actions/projects";
 import { ProjectSettingsDialog } from "@/components/projects/project-settings-dialog";
+import { useProjects } from "@/contexts/projects-context";
 
 export default function DashboardPage() {
   const { user, loading: authLoading } = useAuth();
+  const {
+    projects,
+    loading: projectsLoading,
+    error,
+    createProject,
+  } = useProjects();
   const router = useRouter();
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
   useEffect(() => {
-    if (user) {
-      getUserProjects(user.uid)
-        .then((userProjects) => {
-          setProjects(userProjects);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching projects:", error);
-          setLoading(false);
-        });
-    } else if (!authLoading) {
-      // If auth is done loading and there's no user, redirect.
+    if (!authLoading && !user) {
       router.push("/sign-in");
     }
   }, [user, authLoading, router]);
 
-  const handleProjectCreated = () => {
-    // Re-fetch projects after a new one is created
-    if (user) {
-      setLoading(true);
-      getUserProjects(user.uid)
-        .then((userProjects) => {
-          setProjects(userProjects);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+  const handleProjectCreated = async (projectData: any) => {
+    try {
+      console.log("Dashboard: Creating project with data:", projectData);
+      // Create project through context - it will handle navigation
+      const newProject = await createProject(projectData);
+      console.log("Dashboard: Project created successfully:", newProject);
+      // Close dialog after successful creation
+      setIsCreateDialogOpen(false);
+    } catch (error) {
+      console.error("Dashboard: Error creating project:", error);
+      // Keep dialog open on error so user can try again
     }
   };
 
-  if (authLoading || loading) {
+  if (authLoading || projectsLoading) {
     return (
       <div className="flex items-center justify-center h-full">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <div className="text-center">
+          <h3 className="text-xl font-semibold mb-2">Error Loading Projects</h3>
+          <p className="text-muted-foreground">{error}</p>
+        </div>
       </div>
     );
   }
@@ -79,10 +83,7 @@ export default function DashboardPage() {
         isOpen={isCreateDialogOpen}
         onOpenChange={setIsCreateDialogOpen}
         mode="create"
-        onProjectSaved={(project) => {
-          // Refresh project list or navigate to new project
-          console.log("New project created:", project);
-        }}
+        onProjectSaved={handleProjectCreated}
       />
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-3xl font-bold tracking-tight">Projects</h1>

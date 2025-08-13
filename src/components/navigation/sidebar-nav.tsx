@@ -45,10 +45,8 @@ import { useAuth } from "@/hooks/use-auth";
 import Link from "next/link";
 import { useTheme } from "../theme-provider";
 import { usePathname } from "next/navigation";
-import { Project } from "@/lib/types";
 import { SidebarMenuSkeleton } from "../ui/sidebar";
-import { getUserProjects } from "@/lib/actions/projects";
-import { useEffect, useState } from "react";
+import { useProjects } from "@/contexts/projects-context";
 
 const platformNavItems = [
   {
@@ -65,29 +63,7 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
   const { user, logout } = useAuth();
   const { setTheme } = useTheme();
   const pathname = usePathname();
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [project, setProject] = useState<Project | null>(null);
-
-  useEffect(() => {
-    if (user) {
-      loadProjects();
-    }
-  }, [user]);
-
-  const loadProjects = async () => {
-    if (!user) return;
-
-    try {
-      setLoading(true);
-      const userProjects = await getUserProjects(user.uid);
-      setProjects(userProjects);
-    } catch (error) {
-      console.error("Failed to load projects:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { projects, loading } = useProjects();
 
   return (
     <Sidebar variant="inset" className="border-r " {...props}>
@@ -137,6 +113,12 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
                   <SidebarMenuSkeleton showIcon />
                   <SidebarMenuSkeleton showIcon />
                 </>
+              ) : projects.length === 0 ? (
+                <SidebarMenuItem>
+                  <div className="px-2 py-1.5 text-sm text-muted-foreground">
+                    No projects yet
+                  </div>
+                </SidebarMenuItem>
               ) : (
                 projects.map((project) => (
                   <SidebarMenuItem key={project.id}>

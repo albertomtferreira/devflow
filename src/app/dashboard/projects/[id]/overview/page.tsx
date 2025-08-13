@@ -5,53 +5,29 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ExternalLink, Github, Loader2, X } from "lucide-react";
-import { getProject } from "@/lib/actions/projects";
-import { Project } from "@/lib/types";
-import { useEffect, useState } from "react";
-import { useAuth } from "@/hooks/use-auth";
+import { useProjects } from "@/contexts/projects-context";
+import { useParams } from "next/navigation";
+import { useEffect } from "react";
 
-export default function OverviewPage({ params }: { params: { id: string } }) {
-  const { id } = params;
-  const { user, loading: authLoading } = useAuth();
-  const [project, setProject] = useState<Project | null>(null);
-  const [loading, setLoading] = useState(true);
+export default function OverviewPage() {
+  const params = useParams();
+  const projectId = params.id as string;
+  const { projects, currentProject, setCurrentProject } = useProjects();
 
+  // Ensure current project is set
   useEffect(() => {
-    // Only fetch if auth is complete and we have a user and an id.
-    if (!authLoading && user && id) {
-      setLoading(true);
-      getProject(id, user.uid)
-        .then(setProject)
-        .finally(() => setLoading(false));
-    } else if (!authLoading && !user) {
-      setLoading(false);
+    if (projectId && projects.length > 0) {
+      const project = projects.find((p) => p.id === projectId);
+      if (project && (!currentProject || currentProject.id !== projectId)) {
+        setCurrentProject(project);
+      }
     }
-  }, [id, user, authLoading]);
+  }, [projectId, projects, currentProject, setCurrentProject]);
 
-  // Listen for project updates from other components
-  useEffect(() => {
-    const handleProjectUpdate = (event: Event) => {
-      const customEvent = event as CustomEvent<Project>;
-      setProject(customEvent.detail);
-    };
-
-    window.addEventListener("projectUpdated", handleProjectUpdate);
-    return () =>
-      window.removeEventListener("projectUpdated", handleProjectUpdate);
-  }, []);
-
-  if (authLoading || loading) {
+  if (!currentProject) {
     return (
       <div className="flex items-center justify-center h-full pt-16">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  if (!project) {
-    return (
-      <div className="text-center pt-16">
-        Project not found or you do not have permission to view it.
       </div>
     );
   }
@@ -64,14 +40,16 @@ export default function OverviewPage({ params }: { params: { id: string } }) {
             <CardTitle>Project Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {project.longDescription && (
-              <p className="text-muted-foreground">{project.longDescription}</p>
+            {currentProject.longDescription && (
+              <p className="text-muted-foreground">
+                {currentProject.longDescription}
+              </p>
             )}
-            {!project.longDescription && (
+            {!currentProject.longDescription && (
               <>
                 <p className="text-muted-foreground">
                   The project does not have a long description.
-                </p>{" "}
+                </p>
                 <p className="text-muted-foreground">
                   Head to settings and update your project.
                 </p>
@@ -86,44 +64,39 @@ export default function OverviewPage({ params }: { params: { id: string } }) {
             <CardTitle>Links</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
-            <Button variant="outline" asChild>
-              {project.liveUrl && (
+            {currentProject.liveUrl ? (
+              <Button variant="outline" asChild>
                 <a
-                  href={project.liveUrl}
+                  href={currentProject.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <ExternalLink className="mr-2 h-4 w-4" /> Live App
                 </a>
-              )}
-            </Button>
-            <Button variant="outline" asChild>
-              {!project.liveUrl && (
-                <p>
-                  <X />
-                  No Link for live project{" "}
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                </p>
-              )}
-            </Button>
-            <Button variant="outline" asChild>
-              {project.repoUrl && (
+              </Button>
+            ) : (
+              <Button variant="outline" disabled>
+                <X className="mr-2 h-4 w-4" />
+                No Link for live project
+              </Button>
+            )}
+
+            {currentProject.repoUrl ? (
+              <Button variant="outline" asChild>
                 <a
-                  href={project.repoUrl ?? "#"}
+                  href={currentProject.repoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <Github className="mr-2 h-4 w-4" /> GitHub Repo
                 </a>
-              )}
-            </Button>
-            <Button variant="outline" asChild>
-              {!project.repoUrl && (
-                <p>
-                  <X /> No Link for repo <Github className="mr-2 h-4 w-4" />
-                </p>
-              )}
-            </Button>
+              </Button>
+            ) : (
+              <Button variant="outline" disabled>
+                <X className="mr-2 h-4 w-4" />
+                No Link for repo
+              </Button>
+            )}
           </CardContent>
         </Card>
         <Card>
@@ -131,21 +104,22 @@ export default function OverviewPage({ params }: { params: { id: string } }) {
             <CardTitle>Tech Stack & Skills</CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
-            {project.techStack && project.techStack.length > 0 && (
-              <div>
-                <h3 className="font-semibold mb-2">Tech Stack</h3>
-                <div className="flex flex-wrap gap-2">
-                  {project.techStack.map((tech) => (
-                    <Badge key={tech}>{tech}</Badge>
-                  ))}
+            {currentProject.techStack &&
+              currentProject.techStack.length > 0 && (
+                <div>
+                  <h3 className="font-semibold mb-2">Tech Stack</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {currentProject.techStack.map((tech) => (
+                      <Badge key={tech}>{tech}</Badge>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
-            {project.skills && project.skills.length > 0 && (
+              )}
+            {currentProject.skills && currentProject.skills.length > 0 && (
               <div>
                 <h3 className="font-semibold mb-2">Skills</h3>
                 <div className="flex flex-wrap gap-2">
-                  {project.skills.map((skill) => (
+                  {currentProject.skills.map((skill) => (
                     <Badge key={skill} variant="secondary">
                       {skill}
                     </Badge>
@@ -153,11 +127,11 @@ export default function OverviewPage({ params }: { params: { id: string } }) {
                 </div>
               </div>
             )}
-            {project.tags && project.tags.length > 0 && (
+            {currentProject.tags && currentProject.tags.length > 0 && (
               <div>
                 <h3 className="font-semibold mb-2">Tags</h3>
                 <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
+                  {currentProject.tags.map((tag) => (
                     <Badge key={tag} variant="outline">
                       {tag}
                     </Badge>
@@ -165,9 +139,10 @@ export default function OverviewPage({ params }: { params: { id: string } }) {
                 </div>
               </div>
             )}
-            {(!project.techStack || project.techStack.length === 0) &&
-              (!project.skills || project.skills.length === 0) &&
-              (!project.tags || project.tags.length === 0) && (
+            {(!currentProject.techStack ||
+              currentProject.techStack.length === 0) &&
+              (!currentProject.skills || currentProject.skills.length === 0) &&
+              (!currentProject.tags || currentProject.tags.length === 0) && (
                 <p className="text-sm text-muted-foreground">
                   No tech stack, skills, or tags have been added yet.
                 </p>

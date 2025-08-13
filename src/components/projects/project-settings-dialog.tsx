@@ -1,3 +1,4 @@
+// src/components/projects/project-settings-dialog.tsx
 "use client";
 
 import {
@@ -17,16 +18,17 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { X, Plus, ExternalLink, Github, Loader2 } from "lucide-react";
-import { addProject, getProject, updateProject } from "@/lib/actions/projects";
-import { Project } from "@/lib/types";
-import { useAuth } from "@/hooks/use-auth"; // Assuming you have an auth hook
+import { getProject } from "@/lib/actions/projects";
+import { Project, NewProjectData } from "@/lib/types";
+import { useAuth } from "@/hooks/use-auth";
+import { useProjects } from "@/contexts/projects-context";
 
 interface ProjectSettingsDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  projectId?: string; // For editing existing projects
-  onProjectSaved?: (project: Project) => void; // Callback when project is saved
-  mode?: "create" | "edit"; // Specify the mode
+  projectId?: string;
+  onProjectSaved?: (project: Project | Omit<NewProjectData, "userId">) => void;
+  mode?: "create" | "edit";
 }
 
 export function ProjectSettingsDialog({
@@ -37,7 +39,8 @@ export function ProjectSettingsDialog({
   mode = "create",
 }: ProjectSettingsDialogProps) {
   const { toast } = useToast();
-  const { user } = useAuth(); // Get current user
+  const { user } = useAuth();
+  const { createProject, updateProject } = useProjects();
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingProject, setIsLoadingProject] = useState(false);
 
@@ -121,45 +124,44 @@ export function ProjectSettingsDialog({
         repoUrl: githubLink.trim(),
         techStack,
         skills,
-        userId: user!.uid,
+        tags,
       };
 
-      let savedProject: Project;
+      console.log(
+        "ProjectSettingsDialog: Submitting form with data:",
+        projectData
+      );
 
       if (mode === "create") {
-        // Create new project
-        const projectId = await addProject(projectData);
-        // Get the created project to return full data
-        savedProject = (await getProject(projectId, user!.uid)) as Project;
-
-        toast({
-          title: "Project created!",
-          description: `"${title}" has been created successfully.`,
-        });
+        // Don't close dialog here, let parent handle it
+        // Parent will close after successful creation
+        if (onProjectSaved) {
+          console.log("ProjectSettingsDialog: Calling onProjectSaved callback");
+          await onProjectSaved(projectData);
+        }
       } else {
         // Update existing project
         if (!projectId) throw new Error("Project ID is required for updates");
 
-        await updateProject(projectId, user!.uid, projectData);
-        savedProject = (await getProject(projectId, user!.uid)) as Project;
+        await updateProject(projectId, projectData);
 
-        toast({
-          title: "Project updated!",
-          description: `"${title}" has been updated successfully.`,
-        });
+        // Call the callback if provided
+        if (onProjectSaved) {
+          onProjectSaved({ ...projectData, userId: user!.uid });
+        }
+
+        // Close dialog for edit mode
+        onOpenChange(false);
       }
-
-      // Call the callback with the saved project
-      onProjectSaved?.(savedProject);
-      onOpenChange(false);
     } catch (error) {
-      console.error("Error saving project:", error);
+      console.error("ProjectSettingsDialog: Error saving project:", error);
+      // Don't close dialog on error
       toast({
+        variant: "destructive",
         title: "Error",
         description: `Failed to ${
           mode === "create" ? "create" : "update"
         } project. Please try again.`,
-        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -270,7 +272,6 @@ export function ProjectSettingsDialog({
                     onChange={(e) => setLongDescription(e.target.value)}
                     placeholder="Provide detailed information of your project"
                     className="w-full min-h-[80px] resize-none"
-                    required
                   />
                 </div>
               </CardContent>
