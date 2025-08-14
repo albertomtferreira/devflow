@@ -57,6 +57,14 @@ export interface ProjectsDetailsHeaderProps {
   onSnippetAdded?: (snippet: Snippet & { id: string }) => void; // New optional prop
 }
 
+export interface ProjectSettingsDialogProps {
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  projectId?: string;
+  onProjectSaved?: (project: Project | Omit<NewProjectData, "userId">) => void;
+  mode?: "create" | "edit";
+}
+
 //New Project
 export interface NewProjectData {
   title: string;

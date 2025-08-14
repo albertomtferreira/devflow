@@ -173,7 +173,6 @@ export default function SignInPage() {
         email: values.email,
       });
 
-      console.log("AUTH", user.uid);
       router.push("/dashboard");
       toast({
         title: "Account created!",

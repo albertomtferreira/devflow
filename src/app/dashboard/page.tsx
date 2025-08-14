@@ -46,15 +46,10 @@ export default function DashboardPage() {
 
   const handleProjectCreated = async (projectData: any) => {
     try {
-      console.log("Dashboard: Creating project with data:", projectData);
-      // Create project through context - it will handle navigation
       const newProject = await createProject(projectData);
-      console.log("Dashboard: Project created successfully:", newProject);
-      // Close dialog after successful creation
       setIsCreateDialogOpen(false);
     } catch (error) {
       console.error("Dashboard: Error creating project:", error);
-      // Keep dialog open on error so user can try again
     }
   };
 

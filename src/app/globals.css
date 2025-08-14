@@ -335,4 +335,7 @@
   .tooltip-destructive {
     @apply bg-red-500 font-semibold text-white;
   }
+  .tooltip-accent {
+    @apply bg-accent text-white;
+  }
 }

@@ -15,6 +15,7 @@ import {
   getProject as getProjectFromDb,
   updateProject as updateProjectToDb,
   getUserProjects as getUserProjectsFromDb,
+  deleteProject as deleteProjectFromDb,
 } from "@/lib/actions/projects";
 import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
@@ -28,6 +29,11 @@ interface ProjectsContextType {
 
   // Actions
   createProject: (data: Omit<NewProjectData, "userId">) => Promise<Project>;
+  deleteProject: (
+    projectId: string,
+    userId: string,
+    projectTitle: string
+  ) => Promise<void>;
   updateProject: (
     projectId: string,
     data: Partial<NewProjectData>
@@ -82,6 +88,36 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
     fetchProjects();
   }, [fetchProjects]);
 
+  //Delete Project
+  const deleteProject = useCallback(
+    async (projectId: string, userId: string, projectTitle: string) => {
+      try {
+        await deleteProjectFromDb(projectId, userId, projectTitle);
+
+        setProjects((prev) => prev.filter((p) => p.id !== projectId));
+        if (currentProject?.id === projectId) {
+          setCurrentProject(null);
+        }
+
+        toast({
+          title: "Project deleted",
+          description: `Your project ${projectTitle} has been deleted.`,
+        });
+
+        router.push("/dashboard");
+      } catch (error) {
+        console.error("Failed to delete project:", error);
+        toast({
+          variant: "destructive",
+          title: "Failed to delete project",
+          description: `The deletion of the project failed. ${String(error)}`,
+        });
+        throw error;
+      }
+    },
+    [user, currentProject, router, toast, fetchProjects]
+  );
+
   // Create a new project
   const createProject = useCallback(
     async (data: Omit<NewProjectData, "userId">): Promise<Project> => {
@@ -94,13 +130,10 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
           userId: user.uid,
         };
 
-        console.log("Creating project with data:", projectData);
         const projectId = await addProjectToDb(projectData);
-        console.log("Project created with ID:", projectId);
 
         // Fetch the created project to get full data
         const newProject = await getProjectFromDb(projectId, user.uid);
-        console.log("Fetched new project:", newProject);
 
         if (!newProject) {
           throw new Error("Failed to retrieve created project");
@@ -109,7 +142,6 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
         // Update local state immediately
         setProjects((prev) => {
           const updated = [newProject, ...prev];
-          console.log("Updated projects list:", updated);
           return updated;
         });
 
@@ -123,10 +155,6 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
 
         // Small delay to ensure state updates are processed
         setTimeout(() => {
-          console.log(
-            "Navigating to:",
-            `/dashboard/projects/${projectId}/overview`
-          );
           router.push(`/dashboard/projects/${projectId}/overview`);
         }, 100);
 
@@ -218,6 +246,7 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
     currentProject,
     loading,
     error,
+    deleteProject,
     createProject,
     updateProject,
     refreshProjects,

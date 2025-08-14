@@ -10,6 +10,7 @@ import {
   where,
   getDocs,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { NewProjectData, Project, ProjectStatus } from "../types";
@@ -34,6 +35,26 @@ export async function addProject(data: NewProjectData): Promise<string> {
   } catch (error) {
     console.error("Error adding project to Firestore:", error);
     throw new Error("Failed to create project.");
+  }
+}
+
+//Delete Project from Firebase db
+
+export async function deleteProject(
+  projectId: string,
+  userId: string,
+  projectTitle: string
+): Promise<void> {
+  if (!projectId) {
+    throw new Error("deleteProject: projectId is required");
+  }
+
+  try {
+    const projectRef = doc(db, "projects", projectId);
+    await deleteDoc(projectRef);
+  } catch (error) {
+    console.error("Error deleting project:", error);
+    throw error;
   }
 }
 

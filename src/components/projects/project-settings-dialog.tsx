@@ -19,17 +19,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { X, Plus, ExternalLink, Github, Loader2 } from "lucide-react";
 import { getProject } from "@/lib/actions/projects";
-import { Project, NewProjectData } from "@/lib/types";
+import { ProjectSettingsDialogProps } from "@/lib/types";
 import { useAuth } from "@/hooks/use-auth";
 import { useProjects } from "@/contexts/projects-context";
-
-interface ProjectSettingsDialogProps {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  projectId?: string;
-  onProjectSaved?: (project: Project | Omit<NewProjectData, "userId">) => void;
-  mode?: "create" | "edit";
-}
 
 export function ProjectSettingsDialog({
   isOpen,
@@ -127,35 +119,24 @@ export function ProjectSettingsDialog({
         tags,
       };
 
-      console.log(
-        "ProjectSettingsDialog: Submitting form with data:",
-        projectData
-      );
-
       if (mode === "create") {
-        // Don't close dialog here, let parent handle it
-        // Parent will close after successful creation
         if (onProjectSaved) {
-          console.log("ProjectSettingsDialog: Calling onProjectSaved callback");
           await onProjectSaved(projectData);
         }
       } else {
-        // Update existing project
         if (!projectId) throw new Error("Project ID is required for updates");
 
         await updateProject(projectId, projectData);
 
-        // Call the callback if provided
         if (onProjectSaved) {
           onProjectSaved({ ...projectData, userId: user!.uid });
         }
 
-        // Close dialog for edit mode
         onOpenChange(false);
       }
     } catch (error) {
       console.error("ProjectSettingsDialog: Error saving project:", error);
-      // Don't close dialog on error
+
       toast({
         variant: "destructive",
         title: "Error",

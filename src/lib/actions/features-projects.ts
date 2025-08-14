@@ -54,7 +54,6 @@ export async function updateSnippet(
       ...snippet,
       updatedAt: serverTimestamp(),
     });
-    console.log("Snippet updated successfully");
   } catch (error) {
     console.error("Error updating snippet in Firestore:", error);
     throw new Error("Failed to update snippet.");
@@ -123,7 +122,6 @@ export async function deleteSnippet(
   try {
     const snippetDoc = doc(db, "projects", projectId, "snippets", snippetId);
     await deleteDoc(snippetDoc);
-    console.log("Snippet deleted successfully");
   } catch (error) {
     console.error("Error deleting snippet from Firestore:", error);
     throw new Error("Failed to delete snippet.");

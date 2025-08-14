@@ -79,13 +79,6 @@ export default function CodeVaultPage({ params }: { params: { id: string } }) {
                 <p className="text-muted-foreground">
                   Your code vault is empty.
                 </p>
-                <Button
-                  onClick={() => {
-                    /* This can trigger the header button or open dialog directly */
-                  }}
-                >
-                  Add New Snippet
-                </Button>
               </div>
             </div>
           ) : (
