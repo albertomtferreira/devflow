@@ -21,7 +21,7 @@ export async function addProject(data: NewProjectData): Promise<string> {
     const projectsCol = collection(db, "projects");
     const docRef = await addDoc(projectsCol, {
       ...data,
-      status: "in-progress" as ProjectStatus,
+      status: data.status || ("in-progress" as ProjectStatus), // Use provided status or fallback to in-progress
       role: "Owner",
       techStack: data.techStack || [],
       skills: data.skills || [],

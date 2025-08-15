@@ -76,7 +76,7 @@ export interface NewProjectData {
   liveUrl?: string;
   repoUrl?: string;
   tags?: string[];
-  status?: ProjectStatus; // Optional for updates
+  status?: ProjectStatus; // Now included in create/update operations
 }
 
 //Overview

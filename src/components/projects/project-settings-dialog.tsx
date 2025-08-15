@@ -19,9 +19,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { X, Plus, ExternalLink, Github, Loader2 } from "lucide-react";
 import { getProject } from "@/lib/actions/projects";
-import { ProjectSettingsDialogProps } from "@/lib/types";
+import {
+  ProjectSettingsDialogProps,
+  ProjectStatus,
+  projectStatusConfig,
+} from "@/lib/types";
 import { useAuth } from "@/hooks/use-auth";
 import { useProjects } from "@/contexts/projects-context";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function ProjectSettingsDialog({
   isOpen,
@@ -42,6 +53,7 @@ export function ProjectSettingsDialog({
   const [longDescription, setLongDescription] = useState("");
   const [liveLink, setLiveLink] = useState("");
   const [githubLink, setGithubLink] = useState("");
+  const [status, setStatus] = useState<ProjectStatus>("in-progress");
   const [techStack, setTechStack] = useState<string[]>([]);
   const [skills, setSkills] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
@@ -62,6 +74,7 @@ export function ProjectSettingsDialog({
             setLongDescription(project.longDescription || "");
             setLiveLink(project.liveUrl || "");
             setGithubLink(project.repoUrl || "");
+            setStatus(project.status || "in-progress");
             setTechStack(project.techStack || []);
             setSkills(project.skills || []);
             setTags(project.tags || []);
@@ -89,6 +102,7 @@ export function ProjectSettingsDialog({
       setLongDescription("");
       setLiveLink("");
       setGithubLink("");
+      setStatus("in-progress");
       setTechStack([]);
       setSkills([]);
       setTags([]);
@@ -117,6 +131,7 @@ export function ProjectSettingsDialog({
         techStack,
         skills,
         tags,
+        status,
       };
 
       if (mode === "create") {
@@ -240,6 +255,7 @@ export function ProjectSettingsDialog({
                     required
                   />
                 </div>
+
                 <div className="space-y-2">
                   <Label
                     htmlFor="longDescription"
@@ -254,6 +270,34 @@ export function ProjectSettingsDialog({
                     placeholder="Provide detailed information of your project"
                     className="w-full min-h-[80px] resize-none"
                   />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="status" className="text-sm font-medium">
+                    Project Status *
+                  </Label>
+                  <Select
+                    value={status}
+                    onValueChange={(value: ProjectStatus) => setStatus(value)}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select project status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Object.entries(projectStatusConfig).map(
+                        ([key, config]) => (
+                          <SelectItem key={key} value={key}>
+                            <div className="flex items-center gap-2">
+                              <span
+                                className={`h-2 w-2 rounded-full ${config.className}`}
+                              />
+                              <span>{config.text}</span>
+                            </div>
+                          </SelectItem>
+                        )
+                      )}
+                    </SelectContent>
+                  </Select>
                 </div>
               </CardContent>
             </Card>
