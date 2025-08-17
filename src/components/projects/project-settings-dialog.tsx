@@ -22,7 +22,7 @@ import { getProject } from "@/lib/actions/projects";
 import {
   ProjectSettingsDialogProps,
   ProjectStatus,
-  projectStatusConfig,
+  STATUS_COLORS,
 } from "@/lib/types";
 import { useAuth } from "@/hooks/use-auth";
 import { useProjects } from "@/contexts/projects-context";
@@ -33,6 +33,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { StatusTemplateSelector } from "./status-template-selector";
 
 export function ProjectSettingsDialog({
   isOpen,
@@ -53,7 +54,9 @@ export function ProjectSettingsDialog({
   const [longDescription, setLongDescription] = useState("");
   const [liveLink, setLiveLink] = useState("");
   const [githubLink, setGithubLink] = useState("");
-  const [status, setStatus] = useState<ProjectStatus>("in-progress");
+  const [selectedTemplate, setSelectedTemplate] = useState<string>("simple");
+  const [currentStatus, setCurrentStatus] = useState<string>("");
+  const [projectStatuses, setProjectStatuses] = useState<ProjectStatus[]>([]);
   const [techStack, setTechStack] = useState<string[]>([]);
   const [skills, setSkills] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
@@ -74,7 +77,8 @@ export function ProjectSettingsDialog({
             setLongDescription(project.longDescription || "");
             setLiveLink(project.liveUrl || "");
             setGithubLink(project.repoUrl || "");
-            setStatus(project.status || "in-progress");
+            setCurrentStatus(project.currentStatus || "");
+            setProjectStatuses(project.customStatuses || []);
             setTechStack(project.techStack || []);
             setSkills(project.skills || []);
             setTags(project.tags || []);
@@ -102,7 +106,9 @@ export function ProjectSettingsDialog({
       setLongDescription("");
       setLiveLink("");
       setGithubLink("");
-      setStatus("in-progress");
+      setSelectedTemplate("simple");
+      setCurrentStatus("");
+      setProjectStatuses([]);
       setTechStack([]);
       setSkills([]);
       setTags([]);
@@ -131,7 +137,8 @@ export function ProjectSettingsDialog({
         techStack,
         skills,
         tags,
-        status,
+        ...(mode === "create" && { statusTemplate: selectedTemplate }),
+        ...(mode === "edit" && currentStatus && { currentStatus }),
       };
 
       if (mode === "create") {
@@ -197,7 +204,7 @@ export function ProjectSettingsDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">
             {mode === "create" ? "Create new project" : "Update your project"}
@@ -217,6 +224,21 @@ export function ProjectSettingsDialog({
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6" id="project-form">
+            {/* Status Template Selection - Only show for new projects */}
+            {mode === "create" && (
+              <Card>
+                <CardHeader className="pb-4">
+                  <CardTitle className="text-lg">Project Workflow</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <StatusTemplateSelector
+                    selectedTemplate={selectedTemplate}
+                    onTemplateSelect={setSelectedTemplate}
+                  />
+                </CardContent>
+              </Card>
+            )}
+
             {/* Project Information */}
             <Card>
               <CardHeader className="pb-4">
@@ -272,33 +294,41 @@ export function ProjectSettingsDialog({
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="status" className="text-sm font-medium">
-                    Project Status *
-                  </Label>
-                  <Select
-                    value={status}
-                    onValueChange={(value: ProjectStatus) => setStatus(value)}
-                  >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select project status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Object.entries(projectStatusConfig).map(
-                        ([key, config]) => (
-                          <SelectItem key={key} value={key}>
+                {/* Current Status - Only show for existing projects */}
+                {mode === "edit" && projectStatuses.length > 0 && (
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="currentStatus"
+                      className="text-sm font-medium"
+                    >
+                      Current Status
+                    </Label>
+                    <Select
+                      value={currentStatus}
+                      onValueChange={setCurrentStatus}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select current status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {projectStatuses.map((status) => (
+                          <SelectItem key={status.id} value={status.id}>
                             <div className="flex items-center gap-2">
                               <span
-                                className={`h-2 w-2 rounded-full ${config.className}`}
+                                className={`h-2 w-2 rounded-full ${
+                                  STATUS_COLORS[
+                                    status.color as keyof typeof STATUS_COLORS
+                                  ]?.class || "bg-gray-500"
+                                }`}
                               />
-                              <span>{config.text}</span>
+                              <span>{status.label}</span>
                             </div>
                           </SelectItem>
-                        )
-                      )}
-                    </SelectContent>
-                  </Select>
-                </div>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
               </CardContent>
             </Card>
 
