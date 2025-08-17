@@ -18,7 +18,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useAuth } from "@/hooks/use-auth";
-import { projectStatusConfig } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { PlusCircle, ArrowUpRight, Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -26,6 +25,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ProjectSettingsDialog } from "@/components/projects/project-settings-dialog";
 import { useProjects } from "@/contexts/projects-context";
+import { getStatusById } from "@/lib/actions/project-statuses";
+import { STATUS_COLORS } from "@/lib/types";
 
 export default function DashboardPage() {
   const { user, loading: authLoading } = useAuth();
@@ -51,6 +52,30 @@ export default function DashboardPage() {
     } catch (error) {
       console.error("Dashboard: Error creating project:", error);
     }
+  };
+
+  // Helper function to get status display info
+  const getStatusDisplay = (project: any) => {
+    if (project.customStatuses && project.currentStatus) {
+      const status = getStatusById(
+        project.customStatuses,
+        project.currentStatus
+      );
+      if (status) {
+        return {
+          label: status.label,
+          color:
+            STATUS_COLORS[status.color as keyof typeof STATUS_COLORS]?.class ||
+            "bg-gray-500",
+        };
+      }
+    }
+
+    // Fallback for legacy projects or missing data
+    return {
+      label: "Unknown",
+      color: "bg-gray-500",
+    };
   };
 
   if (authLoading || projectsLoading) {
@@ -118,6 +143,8 @@ export default function DashboardPage() {
               </TableHeader>
               <TableBody>
                 {projects.map((project) => {
+                  const statusDisplay = getStatusDisplay(project);
+
                   return (
                     <TableRow key={project.id}>
                       <TableCell>
@@ -131,14 +158,10 @@ export default function DashboardPage() {
                           <span
                             className={cn(
                               "h-2 w-2 rounded-full",
-                              projectStatusConfig[project.status]?.className ??
-                                "bg-gray-400"
+                              statusDisplay.color
                             )}
                           />
-                          <span>
-                            {projectStatusConfig[project.status]?.text ??
-                              "Unknown"}
-                          </span>
+                          <span>{statusDisplay.label}</span>
                         </div>
                       </TableCell>
                       <TableCell>
