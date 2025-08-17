@@ -47,6 +47,9 @@ import { useTheme } from "../theme-provider";
 import { usePathname } from "next/navigation";
 import { SidebarMenuSkeleton } from "../ui/sidebar";
 import { useProjects } from "@/contexts/projects-context";
+import { STATUS_COLORS } from "@/lib/types";
+import { getStatusById } from "@/lib/actions/project-statuses";
+import { cn } from "@/lib/utils";
 
 const platformNavItems = [
   {
@@ -64,6 +67,23 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
   const { setTheme } = useTheme();
   const pathname = usePathname();
   const { projects, loading } = useProjects();
+
+  // Helper function to get project status color
+  const getProjectStatusColor = (project: any) => {
+    if (project.customStatuses && project.currentStatus) {
+      const status = getStatusById(
+        project.customStatuses,
+        project.currentStatus
+      );
+      if (status) {
+        return (
+          STATUS_COLORS[status.color as keyof typeof STATUS_COLORS]?.class ||
+          "bg-gray-500"
+        );
+      }
+    }
+    return "bg-gray-500"; // Fallback color
+  };
 
   return (
     <Sidebar variant="inset" className="border-r " {...props}>
@@ -130,8 +150,15 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
                       asChild
                     >
                       <Link href={`/dashboard/projects/${project.id}`}>
-                        <Rocket className="size-4" />
-                        <span>{project.title}</span>
+                        <div className="flex items-center gap-2 w-full min-w-0">
+                          <span
+                            className={cn(
+                              "h-2 w-2 rounded-full flex-shrink-0",
+                              getProjectStatusColor(project)
+                            )}
+                          />
+                          <span className="truncate">{project.title}</span>
+                        </div>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
