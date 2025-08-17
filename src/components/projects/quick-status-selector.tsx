@@ -14,6 +14,7 @@ import { ProjectStatus, STATUS_COLORS } from "@/lib/types";
 import { updateProjectCurrentStatus } from "@/lib/actions/project-statuses";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
+import { useProjects } from "@/contexts/projects-context";
 
 interface QuickStatusSelectorProps {
   projectId: string;
@@ -32,6 +33,7 @@ export function QuickStatusSelector({
 }: QuickStatusSelectorProps) {
   const [updating, setUpdating] = useState(false);
   const { toast } = useToast();
+  const { refreshCurrentProject, refreshProjects } = useProjects();
 
   const handleStatusChange = async (newStatusId: string) => {
     if (newStatusId === currentStatus) return;
@@ -47,6 +49,10 @@ export function QuickStatusSelector({
       });
 
       onStatusChanged?.(newStatusId);
+
+      // NEW: Update the context to sync sidebar and other components
+      await refreshCurrentProject(projectId);
+      await refreshProjects(); // This updates the projects array for sidebar
     } catch (error) {
       toast({
         variant: "destructive",
