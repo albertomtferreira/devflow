@@ -336,6 +336,7 @@ export interface Project {
   repoUrl?: string;
   tags?: string[];
   createdAt: string;
+  updatedAt?: string;
   // Legacy fields for backwards compatibility
   status?: LegacyProjectStatus;
 }

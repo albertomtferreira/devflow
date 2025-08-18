@@ -1,10 +1,8 @@
+// src/components/projects/delete-projects-button.tsx
 "use client";
 
-import { useProjects } from "@/contexts/projects-context";
-import { useAuth } from "@/hooks/use-auth";
-import { Project } from "@/lib/types";
-import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { useParams } from "next/navigation";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { Button } from "../ui/button";
 import { Copy, Loader2, Trash } from "lucide-react";
@@ -18,17 +16,19 @@ import {
 } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { getProject } from "@/lib/actions/projects";
+import { useAuth } from "@/hooks/use-auth";
+import { Project } from "@/lib/types";
+import { useProjectDelete } from "@/hooks/use-project-delete";
 
 export function DeleteProjectsButton() {
   const params = useParams();
   const projectId = params.id as string;
-  const { deleteProject } = useProjects();
   const { user, loading: authLoading } = useAuth();
+  const { deleting, handleDeleteProjectWithConfirmation } = useProjectDelete();
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [confirmText, setConfirmText] = useState("");
   const [project, setProject] = useState<Project | null>(null);
-  const [deleting, setDeleting] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -57,45 +57,20 @@ export function DeleteProjectsButton() {
   const openDeleteDialog = () => setIsDeleteDialogOpen(true);
 
   const handleConfirmDelete = async () => {
-    if (!projectId) {
-      console.error("Delete aborted: projectId is missing.");
-      return;
-    }
-
-    if (!nameMatches) {
-      console.warn("Delete aborted: name verification failed.");
-      return;
-    }
-    const userId = user?.uid;
-
-    if (!userId) {
-      console.error("Delete aborted: userId is missing.");
-      return;
-    }
-
     if (!project) {
-      console.error("Delete aborted: project.title not found");
+      console.error("Delete aborted: project not found");
       return;
     }
 
-    const projectTitle = project.title;
-
-    if (!projectTitle) {
-      console.error("Delete aborted: projectTitle is missing.");
-      return;
-    }
-
-    setDeleting(true);
-
-    try {
-      await deleteProject(projectId, userId, projectTitle);
+    const success = await handleDeleteProjectWithConfirmation(
+      project,
+      confirmText
+    );
+    if (success) {
       setIsDeleteDialogOpen(false);
-    } catch (err) {
-      console.error("Delete failed:", err);
-    } finally {
-      setDeleting(false);
     }
   };
+
   const handleCopyName = async () => {
     try {
       await navigator.clipboard.writeText(expectedName);
@@ -103,6 +78,7 @@ export function DeleteProjectsButton() {
       // no-op; clipboard might be blocked
     }
   };
+
   return (
     <>
       <div className="flex gap-1">
@@ -117,6 +93,7 @@ export function DeleteProjectsButton() {
           </TooltipContent>
         </Tooltip>
       </div>
+
       {/* Delete Dialog with name confirmation */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent>

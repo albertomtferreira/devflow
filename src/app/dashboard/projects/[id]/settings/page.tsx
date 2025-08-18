@@ -93,19 +93,6 @@ export default function ProjectSettingsPage() {
             Manage your project configuration and workflow settings.
           </p>
         </div>
-
-        <div className="flex gap-1">
-          <DeleteProjectsButton />
-
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button onClick={() => setIsEditDialogOpen(true)}>
-                <Settings />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Edit Project</TooltipContent>
-          </Tooltip>
-        </div>
       </div>
 
       <Tabs defaultValue="general" className="space-y-6">
