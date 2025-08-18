@@ -50,6 +50,7 @@ import { useProjects } from "@/contexts/projects-context";
 import { STATUS_COLORS } from "@/lib/types";
 import { getStatusById } from "@/lib/actions/project-statuses";
 import { cn } from "@/lib/utils";
+import { TooltipTrigger, Tooltip, TooltipContent } from "../ui/tooltip";
 
 const platformNavItems = [
   {
@@ -165,14 +166,22 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
                     >
                       <Link href={`/dashboard/projects/${project.id}`}>
                         <div className="flex items-center gap-2 w-full min-w-0">
-                          <span
-                            className={cn(
-                              "h-2 w-2 rounded-full flex-shrink-0",
-                              getProjectStatusColor(project)
-                            )}
-                          />
-
                           <span className="truncate">{project.title}</span>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <button
+                                type="button"
+                                onClick={(e) => e.preventDefault()}
+                                className={cn(
+                                  "h-2 w-2 rounded-full flex-shrink-0",
+                                  getProjectStatusColor(project)
+                                )}
+                              />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              {getProjectStatusLabel(project)}
+                            </TooltipContent>
+                          </Tooltip>
                         </div>
                       </Link>
                     </SidebarMenuButton>
