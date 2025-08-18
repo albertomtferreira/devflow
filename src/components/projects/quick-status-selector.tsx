@@ -81,7 +81,7 @@ export function QuickStatusSelector({
         <Badge
           variant="outline"
           className={cn(
-            "cursor-pointer hover:bg-accent transition-colors",
+            "px-3 py-1 text-sm font-medium border flex items-center gap-2",
             "bg-primary-foreground border-primary/20"
           )}
         >
