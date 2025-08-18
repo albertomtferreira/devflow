@@ -50,11 +50,6 @@ import { useProjects } from "@/contexts/projects-context";
 import { STATUS_COLORS } from "@/lib/types";
 import { getStatusById } from "@/lib/actions/project-statuses";
 import { cn } from "@/lib/utils";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@radix-ui/react-tooltip";
 
 const platformNavItems = [
   {
@@ -80,7 +75,6 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
         project.customStatuses,
         project.currentStatus
       );
-      console.log("STATUS", status);
       if (status) {
         return (
           STATUS_COLORS[status.color as keyof typeof STATUS_COLORS]?.class ||
@@ -91,6 +85,7 @@ export function AppSidebar({ ...props }: AppSidebarProps) {
     return "bg-gray-500"; // Fallback color
   };
 
+  // Helper function to get project status label
   const getProjectStatusLabel = (project: any) => {
     if (project.customStatuses && project.currentStatus) {
       const status = getStatusById(

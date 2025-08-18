@@ -15,14 +15,7 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import {
-  Loader2,
-  Settings,
-  Palette,
-  Info,
-  ExternalLink,
-  Trash,
-} from "lucide-react";
+import { Loader2, Settings, Palette, Info, ExternalLink } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ProjectSettingsDialog } from "@/components/projects/project-settings-dialog";

@@ -44,7 +44,12 @@ export function ProjectSettingsDialog({
 }: ProjectSettingsDialogProps) {
   const { toast } = useToast();
   const { user } = useAuth();
-  const { createProject, updateProject } = useProjects();
+  const {
+    createProject,
+    updateProject,
+    refreshCurrentProject,
+    refreshProjects,
+  } = useProjects();
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingProject, setIsLoadingProject] = useState(false);
 
@@ -149,6 +154,10 @@ export function ProjectSettingsDialog({
         if (!projectId) throw new Error("Project ID is required for updates");
 
         await updateProject(projectId, projectData);
+        //Update the context to sync sidebar and other components
+
+        await refreshCurrentProject(projectId);
+        await refreshProjects(); // This updates the projects array for sidebar
 
         if (onProjectSaved) {
           onProjectSaved({ ...projectData, userId: user!.uid });

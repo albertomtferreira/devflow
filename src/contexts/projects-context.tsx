@@ -41,6 +41,9 @@ interface ProjectsContextType {
   refreshProjects: () => Promise<void>;
   refreshCurrentProject: (projectId: string) => Promise<void>;
   setCurrentProject: (project: Project | null) => void;
+
+  // NEW: Add this method for immediate status updates
+  updateProjectStatus: (projectId: string, newStatusId: string) => void;
 }
 
 const ProjectsContext = createContext<ProjectsContextType | undefined>(
@@ -87,6 +90,26 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     fetchProjects();
   }, [fetchProjects]);
+
+  // NEW: Add this method for immediate status updates
+  const updateProjectStatus = useCallback(
+    (projectId: string, newStatusId: string) => {
+      // Update the projects array
+      setProjects((prev) =>
+        prev.map((p) =>
+          p.id === projectId ? { ...p, currentStatus: newStatusId } : p
+        )
+      );
+
+      // Update current project if it's the one being updated
+      if (currentProject?.id === projectId) {
+        setCurrentProject((prev) =>
+          prev ? { ...prev, currentStatus: newStatusId } : null
+        );
+      }
+    },
+    [currentProject]
+  );
 
   //Delete Project
   const deleteProject = useCallback(
@@ -252,6 +275,7 @@ export function ProjectsProvider({ children }: { children: ReactNode }) {
     refreshProjects,
     refreshCurrentProject,
     setCurrentProject,
+    updateProjectStatus, // NEW: Add this to the context value
   };
 
   return (

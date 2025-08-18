@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/dialog";
 
 import { getProject } from "@/lib/actions/projects";
-import { Project } from "@/lib/types";
+import { Project, NewProjectData } from "@/lib/types";
 import { useAuth } from "@/hooks/use-auth";
 import { ProjectSettingsDialog } from "../project-settings-dialog";
 import { useProjects } from "@/contexts/projects-context";
@@ -86,12 +86,31 @@ export default function ProjectsHeader() {
     );
   }
 
-  const handleProjectSaved = (updatedProject: Project) => {
-    setProject(updatedProject);
+  // Fix the type issue by handling both possible types
+  const handleProjectSaved = (
+    updatedProject: Project | Omit<NewProjectData, "userId">
+  ) => {
+    // Check if the updatedProject has an 'id' property (making it a Project)
+    if ("id" in updatedProject) {
+      setProject(updatedProject as Project);
+    } else {
+      // If it's NewProjectData without userId, merge it with existing project data
+      setProject((prev) =>
+        prev
+          ? {
+              ...prev,
+              ...updatedProject,
+              userId: prev.userId, // Preserve the existing userId
+              id: prev.id, // Preserve the existing id
+            }
+          : null
+      );
+    }
+
     window.dispatchEvent(
       new CustomEvent("projectUpdated", {
         detail: updatedProject,
-      }) as CustomEvent<Project>
+      }) as CustomEvent<Project | Omit<NewProjectData, "userId">>
     );
   };
 
@@ -99,8 +118,8 @@ export default function ProjectsHeader() {
     <>
       <div className="flex justify-between">
         <div className="mb-6 flex-shrink-0">
-          <div className="flex gap-2 items-center mb-2">
-            <h1 className="text-3xl font-bold tracking-tight">
+          <div className="flex gap-2 items-center justify-between mb-2">
+            <h1 className="text-3xl font-bold tracking-tight w-auto">
               {project.title}
             </h1>
 
